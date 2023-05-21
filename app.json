@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "tutorApp",
-    "slug": "tutorApp",
+    "slug": "tutorapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,6 +26,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "469d7dc4-764e-4aed-ae36-3d29d03e85a0"
+      }
+    },
+    "owner": "mehtaheerh"
   }
 }
