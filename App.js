@@ -57,8 +57,6 @@ export default function App() {
     const fileRef = ref(storage, '12123');
     // console.log(fileRef, "FILEREF")
     const result = await uploadBytes(fileRef, blob);
-
-
     // We're done with the blob, close and release it
     blob.close();
 
