@@ -51,7 +51,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text onPress={selectFile}>Select</Text>
+      <TouchableOpacity onPress={selectFile}>Select</TouchableOpacity>
       <StatusBar style="auto" />
     </View>
   );
