@@ -23,9 +23,5 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // app.then(() => console.log("done")).catch(() => {console.log("not done")});
-console.log("app done", app);
-const storage = getStorage(app);
 
-console.log(storage, "storage")
-
-export {storage, app};
+export {app};

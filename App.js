@@ -1,72 +1,57 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image } from 'react-native';
 
+import {File} from 'react-native'
+
 import * as DocumentPicker from 'expo-document-picker';
 import { useState } from 'react';
-import { storage, app } from './firebaseConfig';
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { app } from './firebaseConfig';
+import { getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
 
 
 export default function App() {
   const [doc, setDoc] = useState();
   const [uploading, setUploading] = useState(false);
+
+  const storage = getStorage(app, "gs://test-d7c04.appspot.com");
+
+
   const selectFile = async () => {
     const doc = await DocumentPicker.getDocumentAsync({});
     console.log(doc);
     setDoc(doc);
-    // uploadFile(doc);
-    uploadImageAsync(doc.uri);
+    uploadFileAsync(doc);
 
   }
 
-  // const uploadFile = async (doc) => {
-  //   setUploading(true);
-  //   const response = await fetch(doc.uri);
 
-  //   const blob = await response.blob();
-  //   const filename = doc.name;
+  async function uploadFileAsync(doc) {
 
-  //   const storageRef = ref(storage, filename);
-
-  //   // 'file' comes from the Blob or File API
-  //   uploadBytes(storageRef, blob).then((snapshot) => {
-  //     console.log('Uploaded a blob or file!');
-  //   }).catch((e) => {console.log(e)});
-  // }
-
-  async function uploadImageAsync(uri) {
-    // Why are we using XMLHttpRequest? See:
-    // https://github.com/expo/expo/issues/2402#issuecomment-443726662
+    const storageRef = ref(storage, doc.name);
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
         resolve(xhr.response);
       };
       xhr.onerror = function (e) {
-        console.log("ERROR");
+        console.log(e);
         reject(new TypeError("Network request failed"));
       };
       xhr.responseType = "blob";
-      xhr.open("GET", uri, true);
+      xhr.open("GET", doc.uri, true);
       xhr.send(null);
-      console.log(xhr.open)
     });
 
-    // console.log(blob, "BLOB")
+    //CORRECT ONE
+    uploadBytes(storageRef, blob).then((snapshot) => {
+      console.log('Uploaded a blob or file!');
+    });
 
-    const fileRef = ref(storage, '12123');
-    // console.log(fileRef, "FILEREF")
-    const result = await uploadBytes(fileRef, blob);
-    // We're done with the blob, close and release it
-    blob.close();
-
-    // console.log(result);
   }
 
   return (
     <View style={styles.container}>
       <Text onPress={selectFile}>Select</Text>
-      <Text>{doc && doc.uri}</Text>
       <StatusBar style="auto" />
     </View>
   );
