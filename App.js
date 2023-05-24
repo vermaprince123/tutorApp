@@ -9,6 +9,7 @@ import { app } from './firebaseConfig';
 import { getStorage, ref, uploadBytes, uploadString, getDownloadURL, listAll, list } from "firebase/storage";
 
 import PdfItems from './PdfItems';
+import DownloadedItem from './DownloadedItem';
 
 export default function App() {
   const [doc, setDoc] = useState();
@@ -54,9 +55,10 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={selectFile}><Text>Select</Text></TouchableOpacity>
+      {/* <TouchableOpacity onPress={selectFile}><Text>Select</Text></TouchableOpacity> */}
       <StatusBar style="auto" />
       <PdfItems />
+      {/* <DownloadedItem /> */}
     </View>
   );
 }

@@ -33,6 +33,12 @@
         "projectId": "469d7dc4-764e-4aed-ae36-3d29d03e85a0"
       }
     },
-    "owner": "mehtaheerh"
+    "owner": "mehtaheerh",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/469d7dc4-764e-4aed-ae36-3d29d03e85a0"
+    }
   }
 }
