@@ -1,13 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image } from 'react-native';
 
-import {File} from 'react-native'
+import { File } from 'react-native'
 
 import * as DocumentPicker from 'expo-document-picker';
 import { useState } from 'react';
 import { app } from './firebaseConfig';
-import { getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
+import { getStorage, ref, uploadBytes, uploadString, getDownloadURL, listAll, list } from "firebase/storage";
 
+import PdfItems from './PdfItems';
 
 export default function App() {
   const [doc, setDoc] = useState();
@@ -26,6 +27,7 @@ export default function App() {
 
 
   async function uploadFileAsync(doc) {
+    // console.log(listAll(ref(storage)));
 
     const storageRef = ref(storage, doc.name);
     const blob = await new Promise((resolve, reject) => {
@@ -47,12 +49,14 @@ export default function App() {
       console.log('Uploaded a blob or file!');
     });
 
+
   }
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={selectFile}>Select</TouchableOpacity>
+      <TouchableOpacity onPress={selectFile}><Text>Select</Text></TouchableOpacity>
       <StatusBar style="auto" />
+      <PdfItems />
     </View>
   );
 }
