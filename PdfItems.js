@@ -4,19 +4,30 @@ import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image, L
 import { File } from 'react-native'
 
 import * as DocumentPicker from 'expo-document-picker';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { app } from './firebaseConfig';
 import { getStorage, ref, uploadBytes, uploadString, getDownloadURL, listAll } from "firebase/storage";
-import fArray from './fetchFiles';
+import fetchFiles from './fetchFiles';
+// import fArray from './fetchFiles';
 
 export default function PdfItems() {
+  // console.log("PDFITEMS CALLED", fArray.length)
+  const [fArray, setfArray] = useState(null);
+  // const fArray = null;
+  // useEffect(()=>{
+  //   console.log(fetchFiles(), "sdsd");
+  //   // console.log(first)
 
+  // }, []);
+
+  console.log(fetchFiles(), "dsdsd")
+  
   return (
     <View style={styles.container}>
       <Text>PDF Items</Text>
-      {fArray.map((file) => {
+      {fArray ? fArray.map((file) => {
         return <Text key={file.name}>{file.name}</Text>
-      })}
+      }) : <Text>Loading...</Text>}
     </View>
   );
 }
