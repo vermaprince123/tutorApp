@@ -5,11 +5,11 @@ import Pdf from 'react-native-pdf';
 
 
 
-export default function DownloadedItem() {
+export default function DownloadedItem({ navigation, route }) {
 
     const url = "https://firebasestorage.googleapis.com/v0/b/test-d7c04.appspot.com/o/TED%20talks-1.pdf?alt=media&token=a446fef8-e9ff-4992-926f-369dfe5e8a3";
     const source = { uri: url, cache: true }
-
+    console.log(route);
     return (
         <View style={styles.container}>
             <Pdf

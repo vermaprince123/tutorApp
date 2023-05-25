@@ -10,7 +10,7 @@ import { getStorage, ref, uploadBytes, uploadString, getDownloadURL, listAll } f
 import fetchFiles from './fetchFiles';
 // import fArray from './fetchFiles';
 
-export default function PdfItems() {
+export default function PdfItems({ navigation }) {
   // console.log("PDFITEMS CALLED", fArray.length)
   const [fArray, setfArray] = useState(null);
   // const fArray = null;
@@ -35,7 +35,13 @@ export default function PdfItems() {
       <Text>PDF Items</Text>
       {fArray ? fArray.map((file) => {
         console.log(file);
-        return <TouchableOpacity key={file.name} style={styles.pdfContainer}><Text>{file.name}</Text></TouchableOpacity>
+        return <TouchableOpacity 
+        key={file.name} 
+        style={styles.pdfContainer}
+        onPress={() => {
+          navigation.navigate('download', { file })
+        }}
+        ><Text>{file.name}</Text></TouchableOpacity>
       }) : <Text>Loading...</Text>}
     </ScrollView>
   );

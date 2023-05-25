@@ -11,6 +11,9 @@ import { getStorage, ref, uploadBytes, uploadString, getDownloadURL, listAll, li
 import PdfItems from './PdfItems';
 import DownloadedItem from './DownloadedItem';
 import UploadPdf from './UploadPdf';
+import MainStack from './MainStack';
+import { NavigationContainer } from '@react-navigation/native';
+
 
 export default function App() {
   // const [doc, setDoc] = useState();
@@ -58,10 +61,12 @@ export default function App() {
     <View style={styles.container}>
       {/* <PdfItems /> */}
       {/* <UploadPdf /> */}
-
+      <NavigationContainer>
+      <MainStack />
+      </NavigationContainer>
       {/* <TouchableOpacity onPress={selectFile}><Text>Select</Text></TouchableOpacity> */}
       {/* <StatusBar style="auto" /> */}
-      <DownloadedItem />
+      {/* <DownloadedItem /> */}
     </View>
   );
 }
