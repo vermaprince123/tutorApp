@@ -10,55 +10,58 @@ import { getStorage, ref, uploadBytes, uploadString, getDownloadURL, listAll, li
 
 import PdfItems from './PdfItems';
 import DownloadedItem from './DownloadedItem';
+import UploadPdf from './UploadPdf';
 
 export default function App() {
-  const [doc, setDoc] = useState();
-  const [uploading, setUploading] = useState(false);
+  // const [doc, setDoc] = useState();
+  // const [uploading, setUploading] = useState(false);
 
-  const storage = getStorage(app, "gs://test-d7c04.appspot.com");
-
-
-  const selectFile = async () => {
-    const doc = await DocumentPicker.getDocumentAsync({});
-    console.log(doc);
-    setDoc(doc);
-    uploadFileAsync(doc);
-
-  }
+  // const storage = getStorage(app, "gs://test-d7c04.appspot.com");
 
 
-  async function uploadFileAsync(doc) {
-    // console.log(listAll(ref(storage)));
+  // const selectFile = async () => {
+  //   const doc = await DocumentPicker.getDocumentAsync({});
+  //   console.log(doc);
+  //   setDoc(doc);
+  //   uploadFileAsync(doc);
 
-    const storageRef = ref(storage, doc.name);
-    const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function (e) {
-        console.log(e);
-        reject(new TypeError("Network request failed"));
-      };
-      xhr.responseType = "blob";
-      xhr.open("GET", doc.uri, true);
-      xhr.send(null);
-    });
-
-    //CORRECT ONE
-    uploadBytes(storageRef, blob).then((snapshot) => {
-      console.log('Uploaded a blob or file!');
-    });
+  // }
 
 
-  }
+  // async function uploadFileAsync(doc) {
+  //   // console.log(listAll(ref(storage)));
+
+  //   const storageRef = ref(storage, doc.name);
+  //   const blob = await new Promise((resolve, reject) => {
+  //     const xhr = new XMLHttpRequest();
+  //     xhr.onload = function () {
+  //       resolve(xhr.response);
+  //     };
+  //     xhr.onerror = function (e) {
+  //       console.log(e);
+  //       reject(new TypeError("Network request failed"));
+  //     };
+  //     xhr.responseType = "blob";
+  //     xhr.open("GET", doc.uri, true);
+  //     xhr.send(null);
+  //   });
+
+  //   //CORRECT ONE
+  //   uploadBytes(storageRef, blob).then((snapshot) => {
+  //     console.log('Uploaded a blob or file!');
+  //   });
+
+
+  // }
 
   return (
     <View style={styles.container}>
+      {/* <PdfItems /> */}
+      {/* <UploadPdf /> */}
+
       {/* <TouchableOpacity onPress={selectFile}><Text>Select</Text></TouchableOpacity> */}
-      <StatusBar style="auto" />
-      <PdfItems />
-      {/* <DownloadedItem /> */}
+      {/* <StatusBar style="auto" /> */}
+      <DownloadedItem />
     </View>
   );
 }
@@ -66,6 +69,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: "100%", 
+    height: "100%",
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',

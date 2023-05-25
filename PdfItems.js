@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image, Linking } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image, Linking, FlatList, ScrollView } from 'react-native';
 
 import { File } from 'react-native'
 
@@ -27,20 +27,44 @@ export default function PdfItems() {
   // console.log(fetchFiles(), "dsdsd")
   
   return (
-    <View style={styles.container}>
+    <ScrollView 
+    style={styles.container}
+    contentContainerStyle={styles.sview}
+    scrollEnabled={true}
+    >
       <Text>PDF Items</Text>
       {fArray ? fArray.map((file) => {
         console.log(file);
-        return <Text key={file.name}>{file.name}</Text>
+        return <TouchableOpacity key={file.name} style={styles.pdfContainer}><Text>{file.name}</Text></TouchableOpacity>
       }) : <Text>Loading...</Text>}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 1,
+    display: 'flex',
+    margin: 15,
     backgroundColor: '#fff',
+  },
+  pdfContainer: {
+    padding: 15,
     alignItems: 'center',
     justifyContent: 'center',
+    marginVertical: 5,
+    borderColor: 'light-grey',
+    shadowColor: 'black',
+    borderWidth: .5,
+    borderRadius: 10,
+    width: "100%"
+  },
+  singleItem: {
+    width: "100%"
+  },
+  sview: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 50
   },
 });
