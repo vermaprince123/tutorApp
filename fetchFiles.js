@@ -4,54 +4,40 @@ import { app } from './firebaseConfig';
 const storage = getStorage(app, "gs://test-d7c04.appspot.com");
 const listRef = ref(storage, '');
 const fArray = [];
-var count = 0;
-var len = 0;
 
 
 const fetchF = async () => {
-    
-    await listAll(listRef && listRef)
-        .then((res) => {
-            console.log(res, "response");
-            console.log(res.items.length, "res length");
-            len = res.items.length;
-            res.items.forEach((itemRef) => {
-                // All the items under listRef.
-                const itemPath = itemRef["_location"]["path_"]
-                const itemStorage = ref(storage, itemPath);
+    //return promise
+    return new Promise(async (resolve, reject) => {
+        //call listAll() to get all the items in the folder
+        const res = await listAll(listRef);
+        len = res.items.length;
 
-                getDownloadURL(itemStorage && itemStorage).then((url) => {
-                    const i = itemPath.indexOf('.');
-                    const fName = itemPath.substr(0, i);
-                    const fileObj = {
-                        name: fName,
-                        src: url
-                    }
-                    fArray.push(fileObj);
-                    count++;
-                    console.log(count)
-                    console.log(fArray.length, "length")
+        //iterate over the items
+        res.items.forEach(async (itemRef) => {
+            const itempath = itemRef['_location']['path_'];
+            const itemstorage = ref(storage, itempath);
 
-                }).catch((error) => {
-                    console.log(error)
-                })
-                
+            //get the download url of the item
+            await getDownloadURL(itemstorage).then((url) => {
+                //push the item to the array with the obj containing name and src
+                fArray.push({ name: itemRef.name, src: url });
+                //if the array is full, resolve the promise
+                if (fArray.length == len) {
+                    resolve(fArray);
+                } 
+
             });
-
-        }).catch((error) => {
-            // Uh-oh, an error occurred!
-            console.log(error)
         });
+    });
 }
 
 
 const fetchFiles = async () => {
-    console.log("start");
     await fetchF();
-    console.log(fArray, "after fetf call")
-    return fArray;
-
-    // return fArray;
+    return new Promise((resolve, reject) => {
+        resolve(fArray);
+    });
 }
 
 
