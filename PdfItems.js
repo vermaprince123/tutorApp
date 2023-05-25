@@ -14,18 +14,23 @@ export default function PdfItems() {
   // console.log("PDFITEMS CALLED", fArray.length)
   const [fArray, setfArray] = useState(null);
   // const fArray = null;
-  // useEffect(()=>{
-  //   console.log(fetchFiles(), "sdsd");
-  //   // console.log(first)
+  useEffect(()=>{
+    (async ()=>{
+      var arr = await fetchFiles();
+      console.log(arr, "ret arr")
+      setfArray(arr);
+    })();
+    // console.log(first)
 
-  // }, []);
+  }, []);
 
-  console.log(fetchFiles(), "dsdsd")
+  // console.log(fetchFiles(), "dsdsd")
   
   return (
     <View style={styles.container}>
       <Text>PDF Items</Text>
       {fArray ? fArray.map((file) => {
+        console.log(file);
         return <Text key={file.name}>{file.name}</Text>
       }) : <Text>Loading...</Text>}
     </View>

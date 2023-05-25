@@ -8,48 +8,9 @@ var count = 0;
 var len = 0;
 
 
-// listAll(listRef && listRef)
-//     .then((res) => {
-//         console.log(res, "response");
-//         res.items.forEach((itemRef) => {
-//             // All the items under listRef.
-//             const itemPath = itemRef["_location"]["path_"]
-//             const itemStorage = ref(storage, itemPath);
-
-//             getDownloadURL(itemStorage && itemStorage).then((url) => {
-//                 const i = itemPath.indexOf('.');
-//                 const fName = itemPath.substr(0, i);
-//                 const fileObj = {
-//                     name: fName,
-//                     src: url
-//                 }
-//                 fArray.push(fileObj);
-//                 count++;
-//             }).catch((error) => {
-//                 console.log(error)
-//             })
-//         });
-
-//     }).catch((error) => {
-//         // Uh-oh, an error occurred!
-//         console.log(error)
-//     });
-
-//     export default fArray;
-
-
-
-
-
-
-
-
-
-
-//     Find all the prefixes and items.
-const fetchF = () => {
+const fetchF = async () => {
     
-    listAll(listRef && listRef)
+    await listAll(listRef && listRef)
         .then((res) => {
             console.log(res, "response");
             console.log(res.items.length, "res length");
@@ -84,17 +45,12 @@ const fetchF = () => {
 }
 
 
-const fetchFiles = () => {
+const fetchFiles = async () => {
     console.log("start");
-    fetchF();
-    while(true){
-        console.log("while loop...", fArray.length);
-        if(fArray.length == len){
-            console.log("FECTCHED", fArray.length);
-            return fArray;
-        }
-    }
-   console.log("end");
+    await fetchF();
+    console.log(fArray, "after fetf call")
+    return fArray;
+
     // return fArray;
 }
 
