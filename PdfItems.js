@@ -62,7 +62,7 @@ export default function PdfItems() {
     setfArray(arr);
     console.log(name, "delete");
     const storage = getStorage(app, "gs://test-d7c04.appspot.com");
-
+    console.log(fArray.length);
     // Create a reference to the file to delete
     const desertRef = ref(storage, name);
     console.log(desertRef)
@@ -74,10 +74,6 @@ export default function PdfItems() {
       console.log(error)
       // Uh-oh, an error occurred!
     });
-
-    
-    console.log(fArray.length);
-
   }
 
   const SinglePdf = (props) => {
@@ -126,6 +122,7 @@ export default function PdfItems() {
         console.log(file);
         return <Text key={file.name}>{file.name}</Text>
       }) : <Text>Loading...</Text>}
+    </View>
     </View>
   );
 }
