@@ -5,6 +5,8 @@ import { File } from 'react-native'
 
 import * as DocumentPicker from 'expo-document-picker';
 import { useEffect, useState } from 'react';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 import { app } from './firebaseConfig';
 import { getStorage, ref, uploadBytes, uploadString, getDownloadURL, listAll } from "firebase/storage";
 import fetchFiles from './fetchFiles';
@@ -14,7 +16,10 @@ import DownloadedItem from './DownloadedItem';
 
 export default function PdfItems() {
   // console.log("PDFITEMS CALLED", fArray.length)
+  const auth = getAuth(app);
   const [fArray, setfArray] = useState(null);
+  const [login, setLogin] = useState(false);
+  console.log(global.user, "IN PDFS");
   // const fArray = null;
   useEffect(()=>{
     (async ()=>{
@@ -23,6 +28,20 @@ export default function PdfItems() {
       setfArray(arr);
     })();
     // console.log(first)
+    const user = global.user
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const uid = user.uid;
+        setLogin(true);
+        // ...
+      } else {
+        // User is signed out
+        setLogin(false);
+        // ...
+      }
+    });
 
   }, []);
 
@@ -34,7 +53,7 @@ export default function PdfItems() {
     contentContainerStyle={styles.sview}
     scrollEnabled={true}
     >
-      <Text>PDF Items</Text>
+      <Text>PDF Items {login ? "Logged in" : "Logged Out"}</Text>
       {fArray ? fArray.map((file) => {
         console.log(file);
         return <Link 

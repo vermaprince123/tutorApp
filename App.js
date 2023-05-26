@@ -1,9 +1,10 @@
 import { StyleSheet, View } from 'react-native';
 import { NativeRouter, Route, Link, Routes } from "react-router-native";
-import DownloadedItem from './DownloadedItem';
-import UploadPdf from './UploadPdf'
 
+import Login from './Login';
+import UploadPdf from './UploadPdf'
 import PdfItems from './PdfItems';
+import DownloadedItem from './DownloadedItem';
 
 
 
@@ -17,10 +18,11 @@ export default function App() {
       {/* <StatusBar style="auto" /> */}
       {/* <DownloadedItem /> */}
       <Routes>
-        <Route path="/"  element={<PdfItems />} />
+        <Route path="/"  element={<Login />} />
         <Route path="/download" element={<DownloadedItem />}/>
+        <Route path="/pdfs" element={<PdfItems />}/>
       </Routes>
-      <UploadPdf />
+      {/* <UploadPdf /> */}
     </View>
     </NativeRouter>
   );
