@@ -12,6 +12,7 @@ import { getStorage, ref, uploadBytes, uploadString, getDownloadURL, listAll } f
 import fetchFiles from './fetchFiles';
 import { NativeRouter, Route, Link, Routes } from "react-router-native";
 import DownloadedItem from './DownloadedItem';
+import UploadPdf from './UploadPdf';
 // import fArray from './fetchFiles';
 
 export default function PdfItems() {
@@ -23,11 +24,12 @@ export default function PdfItems() {
   // const fArray = null;
   useEffect(()=>{
     (async ()=>{
+      console.log("INSIDE IFFIE")
       var arr = await fetchFiles();
       console.log(arr, "ret arr")
       setfArray(arr);
     })();
-    // console.log(first)
+    console.log("fetchong")
     const user = global.user
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -55,13 +57,14 @@ export default function PdfItems() {
     >
       <Text>PDF Items {login ? "Logged in" : "Logged Out"}</Text>
       {fArray ? fArray.map((file) => {
-        console.log(file);
+        // console.log(file);
         return <Link 
         key={file.name} 
         style={styles.pdfContainer}
         to={"/download?" + file.src}
         ><Text>{file.name}</Text></Link>
       }) : <Text>Loading...</Text>}
+      <UploadPdf />
       {/* <Routes>
         <Route path="/" element={<PdfItems />} />
         <Route path="/download" element={<DownloadedItem />}/>
