@@ -8,9 +8,11 @@ import { useEffect, useState } from 'react';
 import { app } from './firebaseConfig';
 import { getStorage, ref, uploadBytes, uploadString, getDownloadURL, listAll } from "firebase/storage";
 import fetchFiles from './fetchFiles';
+import { NativeRouter, Route, Link, Routes } from "react-router-native";
+import DownloadedItem from './DownloadedItem';
 // import fArray from './fetchFiles';
 
-export default function PdfItems({ navigation }) {
+export default function PdfItems() {
   // console.log("PDFITEMS CALLED", fArray.length)
   const [fArray, setfArray] = useState(null);
   // const fArray = null;
@@ -35,14 +37,16 @@ export default function PdfItems({ navigation }) {
       <Text>PDF Items</Text>
       {fArray ? fArray.map((file) => {
         console.log(file);
-        return <TouchableOpacity 
+        return <Link 
         key={file.name} 
         style={styles.pdfContainer}
-        onPress={() => {
-          navigation.navigate('download', { file })
-        }}
-        ><Text>{file.name}</Text></TouchableOpacity>
+        to={"/download?" + file.src}
+        ><Text>{file.name}</Text></Link>
       }) : <Text>Loading...</Text>}
+      {/* <Routes>
+        <Route path="/" element={<PdfItems />} />
+        <Route path="/download" element={<DownloadedItem />}/>
+      </Routes> */}
     </ScrollView>
   );
 }

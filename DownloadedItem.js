@@ -1,19 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image } from 'react-native';
+import { useLocation } from 'react-router-native';
 
 import Pdf from 'react-native-pdf';
 
 
 
-export default function DownloadedItem({ navigation, route }) {
+export default function DownloadedItem({ props }) {
 
     const url = "https://firebasestorage.googleapis.com/v0/b/test-d7c04.appspot.com/o/TED%20talks-1.pdf?alt=media&token=a446fef8-e9ff-4992-926f-369dfe5e8a3";
-    const source = { uri: url, cache: true }
-    console.log(route);
+    
+    console.log(useLocation().search.slice(1), 'loaction'); 
+    const src = useLocation().search.slice(1);
+    const source = { uri: src, cache: true }
     return (
         <View style={styles.container}>
             <Pdf
-            trustAllCerts={true}
+            trustAllCerts={false}
                 source={source}
                 onLoadComplete={(numberOfPages, filePath) => {
                     console.log(`Number of pages: ${numberOfPages}`);
