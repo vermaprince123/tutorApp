@@ -24,7 +24,6 @@ export default function DownloadedItem({ props }) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-               
                 <Text style={styles.title}> <Icon.Button name="arrow-left" size={20} onPress={goBack}/>
                 {"  "}Document</Text>
             </View>

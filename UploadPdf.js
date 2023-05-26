@@ -3,22 +3,28 @@ import * as DocumentPicker from 'expo-document-picker';
 import { useState } from 'react';
 import { app } from './firebaseConfig';
 import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { useNavigate } from 'react-router-native';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 
-export default function UploadPdf() {
+export default function UploadPdf(props) {
   const [doc, setDoc] = useState();
   const [uploading, setUploading] = useState(false);
 
   const storage = getStorage(app, "gs://test-d7c04.appspot.com");
+  const navigate = useNavigate();
 
 
   const selectFile = async () => {
-    const doc = await DocumentPicker.getDocumentAsync({});
+    const doc = await DocumentPicker.getDocumentAsync({
+      type: ['application/pdf']
+    });
     console.log(doc);
     setDoc(doc);
     uploadFileAsync(doc);
   }
 
+  // console.log(props);
 
   async function uploadFileAsync(doc) {
 
@@ -45,19 +51,27 @@ export default function UploadPdf() {
 
   }
 
+  const handleLogin = () => {
+    navigate('/');
+  }
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={selectFile}><Text style={styles.uploadButton}>+</Text></TouchableOpacity>
+      {props.login ? <TouchableOpacity onPress={selectFile}><Text style={styles.uploadButton}>+</Text></TouchableOpacity> :
+      <TouchableOpacity onPress={handleLogin}><Text style={styles.loginButton}><Icon
+      name='login'
+      size={25}
+      /></Text></TouchableOpacity>}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'purple',
+    backgroundColor: '#000',
     position: "absolute",
-    bottom: 35,
-    right: 35,
+    bottom: 60,
+    right: 20,
     paddingVertical: 7,
     paddingHorizontal: 15,
     borderRadius: 10
@@ -68,5 +82,10 @@ const styles = StyleSheet.create({
   uploadButton: {
     color: "white",
     fontSize: 30,
+  },
+  loginButton: {
+    color: "white",
+    fontSize: 30,
+    paddingVertical: 5
   }
 });

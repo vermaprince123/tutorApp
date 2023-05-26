@@ -27,13 +27,18 @@ export default function Login() {
         console.log(password);
         const email = "princevermasrcc@gmail.com"
         const pass = "!$#@nTv"
-        signInWithEmailAndPassword(auth, email, pass).then((userCredentials) => {
+        signInWithEmailAndPassword(auth, email, password).then((userCredentials) => {
             global.user = userCredentials.user
             console.log(global.user, "SUCCESS");
             navigate('/pdfs');
         })
         // TODO: Do something with the email and password
     };
+
+    const stuLogin = () => {
+        global.user = null;
+        navigate('/pdfs');
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -61,7 +66,7 @@ export default function Login() {
                 </View>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={onLogin}
+                    onPress={stuLogin}
                 >
                     <Text style={styles.buttonText}>Continue as Student</Text>
                 </TouchableOpacity>
