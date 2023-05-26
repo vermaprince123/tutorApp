@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image } from 'react-native';
-import { useLocation } from 'react-router-native';
+import { useLocation, useNavigate } from 'react-router-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Pdf from 'react-native-pdf';
 
@@ -8,16 +9,25 @@ import Pdf from 'react-native-pdf';
 
 export default function DownloadedItem({ props }) {
 
-    const url = "https://firebasestorage.googleapis.com/v0/b/test-d7c04.appspot.com/o/TED%20talks-1.pdf?alt=media&token=a446fef8-e9ff-4992-926f-369dfe5e8a3";
+
+
 
     console.log(useLocation().search.slice(1), 'loaction');
     const src = useLocation().search.slice(1);
     const source = { uri: src, cache: true }
+    const navigate = useNavigate();
+
+    const goBack = () => {
+        console.log("going back")
+        navigate('/pdfs');
+    }
     return (
         <View style={styles.container}>
-                <View style={styles.header}>
-                    <Text style={styles.title}>Document</Text>
-                </View>
+            <View style={styles.header}>
+               
+                <Text style={styles.title}> <Icon.Button name="arrow-left" size={20} onPress={goBack}/>
+                {"  "}Document</Text>
+            </View>
             <Pdf
                 trustAllCerts={false}
                 source={source}
@@ -63,13 +73,13 @@ const styles = StyleSheet.create({
         padding: 10,
         justifyContent: 'center',
         // alignItems: 'center',
-        color:'white',
-      },
-      title: {
+        color: 'white',
+    },
+    title: {
         fontSize: 20,
         fontWeight: 'bold',
         color: 'white'
-      },
+    },
     // pdf: {
     //     flex: 1,
     //     width: Dimensions.get('window').width,
