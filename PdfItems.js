@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image, Linking, FlatList, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image, Linking, Button, ScrollView } from 'react-native';
 
 import { File } from 'react-native'
 
@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 import { app } from './firebaseConfig';
-import { getStorage, ref, uploadBytes, uploadString, getDownloadURL, listAll } from "firebase/storage";
+import { getStorage, ref, uploadBytes, uploadString, getDownloadURL, listAll, deleteObject } from "firebase/storage";
 import fetchFiles from './fetchFiles';
 import { NativeRouter, Route, Link, Routes } from "react-router-native";
 import DownloadedItem from './DownloadedItem';
@@ -21,7 +21,7 @@ export default function PdfItems() {
   const auth = getAuth(app);
   const [fArray, setfArray] = useState(null);
   const [login, setLogin] = useState(false);
-  console.log(global.user, "IN PDFS");
+
 
   const handleLogout = () => {
     signOut(auth).then(() => {
@@ -57,13 +57,51 @@ export default function PdfItems() {
 
   }, []);
 
+  const handleDelete = (name) => {
+    const arr = fArray.filter((file) => { file.name != name });
+    setfArray(arr);
+    console.log(name, "delete");
+    const storage = getStorage(app, "gs://test-d7c04.appspot.com");
+    console.log(fArray.length);
+    // Create a reference to the file to delete
+    const desertRef = ref(storage, name);
+    console.log(desertRef)
+    // Delete the file
+    deleteObject(desertRef && desertRef).then(() => {
+      // File deleted successfully
+      console.log("DELETED")
+    }).catch((error) => {
+      console.log(error)
+      // Uh-oh, an error occurred!
+    });
+    console.log(fArray, "ARRAYYYYY")
+  }
+
+  const SinglePdf = (props) => {
+    const fname = props.file.name
+    return (
+      <View style={styles.pdfContainer}>
+        <Text>{props.file.name}</Text>
+        <View style={styles.buttons}>
+          <Link
+            to={"/download?" + props.file.src}
+            component={Button}
+          >
+            <Text>View</Text>
+          </Link>
+          <Button title={"Delete"} onPress={() => handleDelete(fname)} />
+        </View>
+      </View>
+    )
+  }
+
   // console.log(fetchFiles(), "dsdsd")
 
   return (
     <View style={styles.mainContainer}>
       <View style={styles.header}>
         <Text style={styles.title}>Ishant Commerce Classes</Text>
-        <TouchableOpacity onPress={handleLogout}><Icon name='logout' color={'white'} size={25} style={styles.logout}/></TouchableOpacity>
+        <TouchableOpacity onPress={handleLogout}><Icon name='logout' color={'white'} size={25} style={styles.logout} /></TouchableOpacity>
       </View>
       <ScrollView
         style={styles.container}
@@ -71,14 +109,7 @@ export default function PdfItems() {
         scrollEnabled={true}
       >
         <Text>Choose a PDF to view</Text>
-        {fArray ? fArray.map((file) => {
-          // console.log(file);
-          return <Link
-            key={file.name}
-            style={styles.pdfContainer}
-            to={"/download?" + file.src}
-          ><Text>{file.name}</Text></Link>
-        }) : <Text>Loading...</Text>}
+        {fArray ? fArray.map((file) => <SinglePdf file={file} key={file.name} />) : <Text>Loading...</Text>}
 
         {/* <Routes>
         <Route path="/" element={<PdfItems />} />
@@ -131,14 +162,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     color: 'white',
     flexDirection: 'row'
-},
-title: {
+  },
+  title: {
     fontSize: 20,
     fontWeight: 'bold',
     color: 'white'
-},
-logout: {
-  position: 'relative',
-  left: 72
-}
+  },
+  logout: {
+    position: 'relative',
+    left: 72
+  }
 });
