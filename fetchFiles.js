@@ -3,10 +3,15 @@ import { app } from './firebaseConfig';
 
 const storage = getStorage(app, "gs://test-d7c04.appspot.com");
 const listRef = ref(storage, '');
-const fArray = [];
+var fArray = [];
 
 
 const fetchF = async () => {
+    if(fArray.length > 0){
+        fArray = [];
+    }
+
+    console.log(fArray, "EMPTY ARRAY")
     //return promise
     console.log("INSIDE FETCHF")
     return new Promise(async (resolve, reject) => {
@@ -51,5 +56,5 @@ const fetchFiles = async () => {
     });
 }
 
-
+ 
 export default fetchFiles;

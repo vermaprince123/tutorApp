@@ -40,7 +40,7 @@ export default function PdfItems() {
       setfArray(arr);
     })();
     console.log("fetchong")
-    const user = global.user
+    const user = global.user 
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
@@ -58,15 +58,31 @@ export default function PdfItems() {
   }, []);
 
   const handleDelete = (name) => {
-    const arr = fArray.filter((file) => { file.name != name });
+    // console.log(name, "NAAAAMMMMMMMEEEE")
+    console.log(fArray.length, "BEFORE LENGTH");
+    const arr = fArray.filter((file) => { 
+      console.log(file.name, name, "ARRRAY IN FILTER")
+      if(file.name == name){
+        console.log(file.name, name, "MATCHED !!!!");
+        return false;
+      }
+      return true;
+     });
+    console.log(arr, "AARRRRAAAYY LENGTH");
     setfArray(arr);
-    console.log(name, "delete");
+    // setfArray(arr);
+    // fArray.map((file) => {
+    //   console.log(file.name, "IMSIDE DELETE FUNCTION");
+    // })
+    // console.log(arr.length, "NEW ARRAY")
+    // setfArray(arr);
+    // console.log(name, "delete");
     const storage = getStorage(app, "gs://test-d7c04.appspot.com");
-    console.log(fArray.length);
+    
     // Create a reference to the file to delete
     const desertRef = ref(storage, name);
-    console.log(desertRef)
-    // Delete the file
+    // console.log(desertRef)
+
     deleteObject(desertRef && desertRef).then(() => {
       // File deleted successfully
       console.log("DELETED")
@@ -74,7 +90,7 @@ export default function PdfItems() {
       console.log(error)
       // Uh-oh, an error occurred!
     });
-    console.log(fArray, "ARRAYYYYY")
+    console.log(fArray.length, "AFTER LENGTH");
   }
 
   const SinglePdf = (props) => {
