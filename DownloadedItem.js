@@ -24,8 +24,10 @@ export default function DownloadedItem({ props }) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}> <Icon.Button name="arrow-left" size={20} onPress={goBack}/>
-                {"  "}Document</Text>
+                <Text style={styles.title}> <TouchableOpacity  onPress={goBack} >
+                    <Icon name="arrow-left" size={20} style={styles.backBtn} />
+                </TouchableOpacity>
+                    {"  "}Document</Text>
             </View>
             <Pdf
                 trustAllCerts={false}
@@ -79,6 +81,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white'
     },
+    backBtn: {
+        color: 'white'
+    }
     // pdf: {
     //     flex: 1,
     //     width: Dimensions.get('window').width,

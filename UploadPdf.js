@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ToastAndroid } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { useState } from 'react';
 import { app } from './firebaseConfig';
@@ -17,7 +17,7 @@ export default function UploadPdf(props) {
 
   const selectFile = async () => {
     const doc = await DocumentPicker.getDocumentAsync({
-      type: ['application/pdf']
+      type: ['application/pdf'],
     });
     console.log(doc);
     setDoc(doc);
@@ -27,6 +27,13 @@ export default function UploadPdf(props) {
   // console.log(props);
 
   async function uploadFileAsync(doc) {
+
+    console.log(doc, "DOCUMENT FETCHED");
+
+    if(doc.size > 2 * 1024 * 1024){
+      ToastAndroid.show("File Size should be less than 2 MB", ToastAndroid.SHORT);
+      return;
+    }
 
     const storageRef = ref(storage, doc.name);
     const blob = await new Promise((resolve, reject) => {
@@ -46,6 +53,7 @@ export default function UploadPdf(props) {
     //CORRECT ONE
     uploadBytes(storageRef, blob).then((snapshot) => {
       console.log('Uploaded a blob or file!');
+      ToastAndroid.show("File Uploaded Successfully", ToastAndroid.SHORT);
     });
 
 

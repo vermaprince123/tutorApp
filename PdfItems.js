@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image, Linking, Button, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image, Linking, Button, ScrollView, ToastAndroid } from 'react-native';
 
 import { File } from 'react-native'
 
@@ -27,6 +27,7 @@ export default function PdfItems() {
     signOut(auth).then(() => {
       // Sign-out successful.
       global.user = null
+      ToastAndroid.show("Signed Out of Teacher mode", ToastAndroid.SHORT);
     }).catch((error) => {
       // An error happened.
     });
@@ -40,7 +41,7 @@ export default function PdfItems() {
       setfArray(arr);
     })();
     console.log("fetchong")
-    const user = global.user 
+    const user = global.user
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
@@ -60,28 +61,21 @@ export default function PdfItems() {
   const handleDelete = (name) => {
     // console.log(name, "NAAAAMMMMMMMEEEE")
     console.log(fArray.length, "BEFORE LENGTH");
-    const arr = fArray.filter((file) => { 
+    const arr = fArray.filter((file) => {
       console.log(file.name, name, "ARRRAY IN FILTER")
-      if(file.name == name){
+      if (file.name == name) {
         console.log(file.name, name, "MATCHED !!!!");
         return false;
       }
       return true;
-     });
+    });
     console.log(arr, "AARRRRAAAYY LENGTH");
     setfArray(arr);
-    // setfArray(arr);
-    // fArray.map((file) => {
-    //   console.log(file.name, "IMSIDE DELETE FUNCTION");
-    // })
-    // console.log(arr.length, "NEW ARRAY")
-    // setfArray(arr);
-    // console.log(name, "delete");
-    const storage = getStorage(app, "gs://test-d7c04.appspot.com");
     
+    const storage = getStorage(app, "gs://test-d7c04.appspot.com");
+
     // Create a reference to the file to delete
     const desertRef = ref(storage, name);
-    // console.log(desertRef)
 
     deleteObject(desertRef && desertRef).then(() => {
       // File deleted successfully
@@ -102,10 +96,14 @@ export default function PdfItems() {
           <Link
             to={"/download?" + props.file.src}
             component={Button}
+            style={styles.button}
           >
-            <Text>View</Text>
+            <Text style={styles.btnText}>View</Text>
           </Link>
-          <Button title={"Delete"} onPress={() => handleDelete(fname)} />
+          {login && <TouchableOpacity onPress={() => handleDelete(fname)} style={styles.button} >
+            <Text style={styles.btnText}>Delete</Text>
+          </TouchableOpacity>}
+
         </View>
       </View>
     )
@@ -117,7 +115,7 @@ export default function PdfItems() {
     <View style={styles.mainContainer}>
       <View style={styles.header}>
         <Text style={styles.title}>Ishant Commerce Classes</Text>
-        <TouchableOpacity onPress={handleLogout}><Icon name='logout' color={'white'} size={25} style={styles.logout} /></TouchableOpacity>
+        {login && <TouchableOpacity onPress={handleLogout}><Icon name='logout' color={'white'} size={25} style={styles.logout} /></TouchableOpacity> }
       </View>
       <ScrollView
         style={styles.container}
@@ -177,7 +175,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     color: 'white',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    position: 'absolute',
+    top: -35,
+    
+    
   },
   title: {
     fontSize: 20,
@@ -187,5 +189,27 @@ const styles = StyleSheet.create({
   logout: {
     position: 'relative',
     left: 72
+  },
+  buttons: {
+    width: "100%",
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  button: {
+    width: "40%",
+    marginTop: 5,
+    marginHorizontal: 10,
+    padding: 10,
+    height: 40,
+    backgroundColor: '#000',
+    color: '#fff',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center'
+  },
+  btnText: {
+    color: 'white'
   }
 });

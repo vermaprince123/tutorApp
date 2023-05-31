@@ -8,6 +8,8 @@ import {
     View,
     TextInput,
     TouchableOpacity,
+    ToastAndroid,
+    Image
 } from 'react-native';
 import { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
@@ -26,12 +28,16 @@ export default function Login() {
     const onLogin = () => {
         console.log(password);
         const email = "princevermasrcc@gmail.com"
-        const pass = "!$#@nTv"
-        signInWithEmailAndPassword(auth, email, password).then((userCredentials) => {
+        // const pass = "!$#@nTv"
+        password ? signInWithEmailAndPassword(auth, email, password).then((userCredentials) => {
             global.user = userCredentials.user
             console.log(global.user, "SUCCESS");
+            ToastAndroid.show("Signed In as a Teacher", ToastAndroid.SHORT);
             navigate('/pdfs');
-        })
+        }).catch((error) => {
+            console.log(error.code);
+            ToastAndroid.show(error.code, ToastAndroid.SHORT);
+        }) : ToastAndroid.show("Please Enter password to login as Teacher", ToastAndroid.SHORT);
         // TODO: Do something with the email and password
     };
 
@@ -46,6 +52,7 @@ export default function Login() {
                 <View style={styles.header}>
                     <Text style={styles.title}>Login</Text>
                 </View>
+                <Image  source = {require('./assets/appLogo.png')} style={styles.logo}/>
                 <View style={styles.form}>
                     <TextInput
                         style={styles.input}
@@ -75,6 +82,9 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
+    logo: {
+        // width: "50%"
+    },
     container: {
         display: 'flex',
         flex: 1,
