@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image, Linking, Button, ScrollView, ToastAndroid } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image, Linking, Button, ScrollView, ToastAndroid, Dimensions, ActivityIndicator } from 'react-native';
 
 import { File } from 'react-native'
 
@@ -123,7 +123,7 @@ export default function PdfItems() {
         scrollEnabled={true}
       >
         <Text>Choose a PDF to view</Text>
-        {fArray ? fArray.map((file) => <SinglePdf file={file} key={file.name} />) : <Text>Loading...</Text>}
+        {fArray ? fArray.map((file) => <SinglePdf file={file} key={file.name} />) :  <ActivityIndicator size="large" color="black" style={styles.loader} />}
 
         {/* <Routes>
         <Route path="/" element={<PdfItems />} />
@@ -140,12 +140,18 @@ const styles = StyleSheet.create({
     width: "100%",
     position: 'relative',
     top: 25,
+    display: 'flex',
+    flexDirection: 'column',
+    height: Dimensions.get('screen').height,
+    paddingTop: 15
   },
   container: {
     flexGrow: 1,
     display: 'flex',
     margin: 15,
     backgroundColor: '#fff',
+    flexDirection: 'column'
+
   },
   pdfContainer: {
     padding: 15,
@@ -176,9 +182,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     color: 'white',
     flexDirection: 'row',
-    position: 'absolute',
-    top: -35,
-    
+    // position: 'absolute',
+    // top: -35,
+    alignSelf: 'flex-start'
     
   },
   title: {
@@ -211,5 +217,8 @@ const styles = StyleSheet.create({
   },
   btnText: {
     color: 'white'
+  },
+  loader: {
+    alignSelf: 'center'
   }
 });

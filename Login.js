@@ -9,7 +9,8 @@ import {
     TextInput,
     TouchableOpacity,
     ToastAndroid,
-    Image
+    Image,
+    Dimensions
 } from 'react-native';
 import { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
@@ -49,41 +50,51 @@ export default function Login() {
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle={useColorScheme() === 'dark' ? 'light-content' : 'dark-content'} />
-                <View style={styles.header}>
-                    <Text style={styles.title}>Login</Text>
-                </View>
-                <Image  source = {require('./assets/appLogo.png')} style={styles.logo}/>
-                <View style={styles.form}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Password"
-                        value={password}
-                        onChangeText={setPassword}
-                        secureTextEntry={true}
-                    />
-                </View>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={onLogin}
-                >
-                    <Text style={styles.buttonText}>Continue as Teacher</Text>
-                </TouchableOpacity>
-                <View style={styles.header}>
-                    <Text style={styles.title}>OR</Text>
-                </View>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={stuLogin}
-                >
-                    <Text style={styles.buttonText}>Continue as Student</Text>
-                </TouchableOpacity>
+            <Image source={require('./assets/appLogo.png')} style={styles.logo} />
+            <View style={styles.iccName}>
+                <Text style={styles.nameTitle}>Ishant Commerce Classes</Text>
+            </View>
+            <View style={styles.header}>
+                <Text style={styles.title}>Login</Text>
+            </View>
+            <View style={styles.form}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry={true}
+                />
+            </View>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={onLogin}
+            >
+                <Text style={styles.buttonText}>Continue as Teacher</Text>
+            </TouchableOpacity>
+            <View style={styles.header}>
+                <Text style={styles.title}>OR</Text>
+            </View>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={stuLogin}
+            >
+                <Text style={styles.buttonText}>Continue as Student</Text>
+            </TouchableOpacity>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
+    iccName: {
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     logo: {
-        // width: "50%"
+        width: Dimensions.get('window').width*0.6,
+        height: Dimensions.get('window').width*0.6,
+        resizeMode: 'contain'
     },
     container: {
         display: 'flex',
@@ -101,6 +112,11 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         fontWeight: 'bold',
+    },
+    nameTitle: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: '#3B3B3B'
     },
     form: {
         width: 300,
@@ -128,4 +144,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white'
     },
+
 });

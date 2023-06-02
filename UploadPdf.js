@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, ToastAndroid } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ToastAndroid, Dimensions } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { useState } from 'react';
 import { app } from './firebaseConfig';
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#000',
     position: "absolute",
-    bottom: 60,
+    bottom: Dimensions.get('window').height*0.12,
     right: 20,
     paddingVertical: 7,
     paddingHorizontal: 15,

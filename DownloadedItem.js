@@ -1,6 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image } from 'react-native';
 import { useLocation, useNavigate } from 'react-router-native';
+// import { usePreventScreenCapsture } from 'expo-screen-capture';
+// import * as ScreenCapture from 'expo-screen-capture';s
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Pdf from 'react-native-pdf';
@@ -10,7 +13,7 @@ import Pdf from 'react-native-pdf';
 export default function DownloadedItem({ props }) {
 
 
-
+// usePreventScreenCapture();
 
     console.log(useLocation().search.slice(1), 'loaction');
     const src = useLocation().search.slice(1);
