@@ -1,9 +1,7 @@
 import {
     SafeAreaView,
-    StatusBar,
     StyleSheet,
     Text,
-    useColorScheme,
     View,
     TextInput,
     TouchableOpacity,
@@ -11,6 +9,7 @@ import {
     Image,
     Dimensions
 } from 'react-native';
+import { ERROR_MSG, USER_EMAIL } from './AppConstant';
 import { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigate } from 'react-router-native';
@@ -21,24 +20,19 @@ import { app } from './firebaseConfig';
 
 export default function Login() {
     const auth = getAuth(app);
-    console.log(auth);
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
     const onLogin = () => {
-        console.log(password);
-        const email = "princevermasrcc@gmail.com"
-        // const pass = "!$#@nTv"
+        const email = USER_EMAIL;
         password ? signInWithEmailAndPassword(auth, email, password).then((userCredentials) => {
-            global.user = userCredentials.user
-            console.log(global.user, "SUCCESS");
+            global.user = userCredentials?.user;
             ToastAndroid.show("Signed In as a Teacher", ToastAndroid.SHORT);
             navigate('/pdfs');
         }).catch((error) => {
-            console.log(error.code);
-            ToastAndroid.show(error.code, ToastAndroid.SHORT);
+            console.log(error,"onLogin function")
+            ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
         }) : ToastAndroid.show("Please Enter password to login as Teacher", ToastAndroid.SHORT);
-        // TODO: Do something with the email and password
     };
 
     const stuLogin = () => {
@@ -48,7 +42,6 @@ export default function Login() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar barStyle={useColorScheme() === 'dark' ? 'light-content' : 'dark-content'} />
             <Image source={require('./assets/appLogo.png')} style={styles.logo} />
             <View style={styles.iccName}>
                 <Text style={styles.nameTitle}>Ishant Commerce Classes</Text>

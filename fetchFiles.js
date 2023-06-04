@@ -1,7 +1,7 @@
 import { getStorage, ref, uploadBytes, uploadString, getDownloadURL, listAll } from "firebase/storage";
 import { app } from './firebaseConfig';
 
-const storage = getStorage(app, "gs://test-d7c04.appspot.com");
+const storage = getStorage(app, "gs://ishantcommerceclasses.appspot.com");
 const listRef = ref(storage, '');
 var fArray = [];
 
@@ -10,10 +10,6 @@ const fetchF = async () => {
     if(fArray.length > 0){
         fArray = [];
     }
-
-    console.log(fArray, "EMPTY ARRAY")
-    //return promise
-    console.log("INSIDE FETCHF")
     return new Promise(async (resolve, reject) => {
         //call listAll() to get all the items in the folder
         const res = await listAll(listRef);
@@ -49,11 +45,14 @@ const fetchF = async () => {
 
 
 const fetchFiles = async () => {
-    console.log("INSIDE FETCH FILES")
-    await fetchF();
-    return new Promise((resolve, reject) => {
-        resolve(fArray);
-    });
+   try{
+        await fetchF();
+        return new Promise((resolve, reject) => {
+            resolve(fArray);
+        });
+   }catch(e){
+
+   }
 }
 
  

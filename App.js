@@ -1,8 +1,6 @@
-import { StyleSheet, View } from 'react-native';
-import { NativeRouter, Route, Link, Routes } from "react-router-native";
-
+import { StyleSheet, View, StatusBar, useColorScheme } from 'react-native';
+import { NativeRouter, Route, Routes } from "react-router-native";
 import Login from './Login';
-import UploadPdf from './UploadPdf'
 import PdfItems from './PdfItems';
 import DownloadedItem from './DownloadedItem';
 
@@ -11,18 +9,13 @@ import DownloadedItem from './DownloadedItem';
 export default function App() {
   return (
     <NativeRouter>
+    <StatusBar barStyle={useColorScheme() === 'dark' ? 'light-content' : 'dark-content'} />
     <View style={styles.container}>
-      {/* <PdfItems /> */}
-      
-      {/* <TouchableOpacity onPress={selectFile}><Text>Select</Text></TouchableOpacity> */}
-      {/* <StatusBar style="auto" /> */}
-      {/* <DownloadedItem /> */}
       <Routes>
         <Route path="/"  element={<Login />} />
         <Route path="/download" element={<DownloadedItem />}/>
         <Route path="/pdfs" element={<PdfItems />}/>
       </Routes>
-      {/* <UploadPdf /> */}
     </View>
     </NativeRouter>
   );

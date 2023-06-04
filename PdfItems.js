@@ -1,23 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image, Linking, Button, ScrollView, ToastAndroid, Dimensions, ActivityIndicator } from 'react-native';
-
-import { File } from 'react-native'
-
-import * as DocumentPicker from 'expo-document-picker';
+import { StyleSheet, Text, View, TouchableOpacity, Button, ScrollView, ToastAndroid, Dimensions, ActivityIndicator } from 'react-native';
 import { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-
+import { ERROR_MSG, UPLOAD_LINK } from './AppConstant';
 import { app } from './firebaseConfig';
-import { getStorage, ref, uploadBytes, uploadString, getDownloadURL, listAll, deleteObject } from "firebase/storage";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 import fetchFiles from './fetchFiles';
-import { NativeRouter, Route, Link, Routes } from "react-router-native";
-import DownloadedItem from './DownloadedItem';
+import { Link } from "react-router-native";
 import UploadPdf from './UploadPdf';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-// import fArray from './fetchFiles';
+
 
 export default function PdfItems() {
-  // console.log("PDFITEMS CALLED", fArray.length)
   const auth = getAuth(app);
   const [fArray, setfArray] = useState(null);
   const [login, setLogin] = useState(false);
@@ -25,66 +18,41 @@ export default function PdfItems() {
 
   const handleLogout = () => {
     signOut(auth).then(() => {
-      // Sign-out successful.
       global.user = null
       ToastAndroid.show("Signed Out of Teacher mode", ToastAndroid.SHORT);
     }).catch((error) => {
-      // An error happened.
+      console.log(error,"handleLogout function")
+      global.user = null;
+      ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
     });
   }
-  // const fArray = null;
+  
   useEffect(() => {
     (async () => {
-      console.log("INSIDE IFFIE")
       var arr = await fetchFiles();
-      console.log(arr, "ret arr")
-      setfArray(arr);
+      setfArray(arr || []);
     })();
-    console.log("fetchong")
-    const user = global.user
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
         setLogin(true);
-        // ...
       } else {
-        // User is signed out
         setLogin(false);
-        // ...
       }
     });
-
   }, []);
 
   const handleDelete = (name) => {
-    // console.log(name, "NAAAAMMMMMMMEEEE")
-    console.log(fArray.length, "BEFORE LENGTH");
-    const arr = fArray.filter((file) => {
-      console.log(file.name, name, "ARRRAY IN FILTER")
-      if (file.name == name) {
-        console.log(file.name, name, "MATCHED !!!!");
-        return false;
-      }
-      return true;
-    });
-    console.log(arr, "AARRRRAAAYY LENGTH");
-    setfArray(arr);
-    
-    const storage = getStorage(app, "gs://test-d7c04.appspot.com");
-
-    // Create a reference to the file to delete
+    const storage = getStorage(app, UPLOAD_LINK);
     const desertRef = ref(storage, name);
-
-    deleteObject(desertRef && desertRef).then(() => {
-      // File deleted successfully
-      console.log("DELETED")
+    const arr = fArray?.filter((file) =>(file?.name == name));
+    setfArray(arr || []);
+    deleteObject(desertRef).then(() => {
+      ToastAndroid.show("Deleted File Successfully !!", ToastAndroid.SHORT);
+      console.log("deleteObject function")
     }).catch((error) => {
-      console.log(error)
-      // Uh-oh, an error occurred!
+      console.log(error);
+      ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
     });
-    console.log(fArray.length, "AFTER LENGTH");
   }
 
   const SinglePdf = (props) => {
@@ -109,8 +77,6 @@ export default function PdfItems() {
     )
   }
 
-  // console.log(fetchFiles(), "dsdsd")
-
   return (
     <View style={styles.mainContainer}>
       <View style={styles.header}>
@@ -124,11 +90,6 @@ export default function PdfItems() {
       >
         <Text>Choose a PDF to view</Text>
         {fArray ? fArray.map((file) => <SinglePdf file={file} key={file.name} />) :  <ActivityIndicator size="large" color="black" style={styles.loader} />}
-
-        {/* <Routes>
-        <Route path="/" element={<PdfItems />} />
-        <Route path="/download" element={<DownloadedItem />}/>
-      </Routes> */}
       </ScrollView>
       <UploadPdf login={login} />
     </View>

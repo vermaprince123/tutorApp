@@ -1,9 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useLocation, useNavigate } from 'react-router-native';
-// import { usePreventScreenCapture } from 'expo-screen-capture';
 import RNScreenRecordPrevent from 'react-native-screen-record-prevent';
-
-
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Pdf from 'react-native-pdf';
 import { useEffect } from 'react';
@@ -15,14 +12,11 @@ export default function DownloadedItem() {
     console.log(RNScreenRecordPrevent, "Screen Record zprevent")
    })
 
-    // usePreventScreenCapture();
-    console.log(useLocation().search.slice(1), 'loaction');
     const src = useLocation().search.slice(1);
     const source = { uri: src, cache: true }
     const navigate = useNavigate();
 
     const goBack = () => {
-        console.log("going back")
         navigate('/pdfs');
     }
     return (
@@ -31,7 +25,7 @@ export default function DownloadedItem() {
                 <Text style={styles.title}> <TouchableOpacity  onPress={goBack} >
                     <Icon name="arrow-left" size={20} style={styles.backBtn} />
                 </TouchableOpacity>
-                    {"  "}Document</Text>
+                    Document</Text>
             </View>
             <Pdf
                 trustAllCerts={false}
@@ -59,7 +53,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        // marginTop: 25,
         height: "100%",
         width: "100%"
     },

@@ -5,44 +5,44 @@ import { app } from './firebaseConfig';
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { useNavigate } from 'react-router-native';
 import Icon from 'react-native-vector-icons/AntDesign';
+import { USER_EMAIL, ERROR_MSG } from './AppConstant';
 
 
 export default function UploadPdf(props) {
   const [doc, setDoc] = useState();
   const [uploading, setUploading] = useState(false);
 
-  const storage = getStorage(app, "gs://test-d7c04.appspot.com");
+  const storage = getStorage(app, USER_EMAIL);
   const navigate = useNavigate();
 
 
   const selectFile = async () => {
-    const doc = await DocumentPicker.getDocumentAsync({
-      type: ['application/pdf'],
-    });
-    console.log(doc);
-    setDoc(doc);
-    uploadFileAsync(doc);
+    try {
+      const doc = await DocumentPicker.getDocumentAsync({
+        type: ['application/pdf'],
+      });
+      setDoc(doc);
+      uploadFileAsync(doc);
+    } catch (error) {
+      console.log(error,"selectFile function");
+      ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
+    }
   }
 
-  // console.log(props);
-
   async function uploadFileAsync(doc) {
-
-    console.log(doc, "DOCUMENT FETCHED");
-
     if(doc.size > 2 * 1024 * 1024){
       ToastAndroid.show("File Size should be less than 2 MB", ToastAndroid.SHORT);
       return;
     }
 
-    const storageRef = ref(storage, doc.name);
+    const storageRef = ref(storage, doc?.name);
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
         resolve(xhr.response);
       };
       xhr.onerror = function (e) {
-        console.log(e);
+        console.log(e, "onerror function");
         reject(new TypeError("Network request failed"));
       };
       xhr.responseType = "blob";
@@ -51,10 +51,12 @@ export default function UploadPdf(props) {
     });
 
     //CORRECT ONE
-    uploadBytes(storageRef, blob).then((snapshot) => {
-      console.log('Uploaded a blob or file!');
+    uploadBytes(storageRef, blob).then(() => {
       ToastAndroid.show("File Uploaded Successfully", ToastAndroid.SHORT);
-    });
+    }).catch((error)=>{
+      console.log(error, "uploadBytes");
+      ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
+    })
 
 
   }
@@ -83,9 +85,6 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     paddingHorizontal: 15,
     borderRadius: 10
-    // width: 10,
-    // height: 10,
-    // borderRadius: "10px"
   },
   uploadButton: {
     color: "white",
