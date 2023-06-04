@@ -1,20 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useLocation, useNavigate } from 'react-router-native';
-// import { usePreventScreenCapsture } from 'expo-screen-capture';
-// import * as ScreenCapture from 'expo-screen-capture';s
+// import { usePreventScreenCapture } from 'expo-screen-capture';
+import RNScreenRecordPrevent from 'react-native-screen-record-prevent';
+
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 import Pdf from 'react-native-pdf';
+import { useEffect } from 'react';
 
 
 
-export default function DownloadedItem({ props }) {
+export default function DownloadedItem() {
+   useEffect(() => {
+    console.log(RNScreenRecordPrevent, "Screen Record zprevent")
+   })
 
-
-// usePreventScreenCapture();
-
+    // usePreventScreenCapture();
     console.log(useLocation().search.slice(1), 'loaction');
     const src = useLocation().search.slice(1);
     const source = { uri: src, cache: true }
@@ -66,9 +67,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: "stretch",
         borderColor: "red",
-        // backgroundColor: "#fff"
-        // width: "2",
-        // height: Dimensions.get('window').height,
     },
     header: {
         backgroundColor: '#000',
@@ -76,7 +74,6 @@ const styles = StyleSheet.create({
         width: "100%",
         padding: 10,
         justifyContent: 'center',
-        // alignItems: 'center',
         color: 'white',
     },
     title: {
@@ -87,9 +84,4 @@ const styles = StyleSheet.create({
     backBtn: {
         color: 'white'
     }
-    // pdf: {
-    //     flex: 1,
-    //     width: Dimensions.get('window').width,
-    //     height: Dimensions.get('window').height,
-    // },
 });

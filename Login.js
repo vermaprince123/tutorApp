@@ -1,6 +1,5 @@
 import {
     SafeAreaView,
-    ScrollView,
     StatusBar,
     StyleSheet,
     Text,
@@ -14,7 +13,7 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-import { RedirectFunction, redirect, Link, useNavigate } from 'react-router-native';
+import { useNavigate } from 'react-router-native';
 
 import { app } from './firebaseConfig';
 

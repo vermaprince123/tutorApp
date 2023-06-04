@@ -17,6 +17,9 @@ import expo.modules.ReactNativeHostWrapper;
 
 import java.util.List;
 
+// import com.videoready.screenrecordprev;
+import com.killserver.screenshotprev.RNPreventScreenshotPackage;
+
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
@@ -34,6 +37,7 @@ public class MainApplication extends Application implements ReactApplication {
         // packages.add(new MyReactNativePackage());
         
         packages.add(new com.swmansion.rnscreens.RNScreensPackage());
+        packages.add(new RNPreventRecordPackage());
 
         return packages;
       }
