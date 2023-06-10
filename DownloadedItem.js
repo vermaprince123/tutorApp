@@ -25,7 +25,7 @@ export default function DownloadedItem() {
                 <Text style={styles.title}> <TouchableOpacity  onPress={goBack} >
                     <Icon name="arrow-left" size={20} style={styles.backBtn} />
                 </TouchableOpacity>
-                    Document</Text>
+                    {"  "}Document</Text>
             </View>
             <Pdf
                 trustAllCerts={false}

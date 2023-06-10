@@ -15,6 +15,13 @@ export default function PdfItems() {
   const [fArray, setfArray] = useState(null);
   const [login, setLogin] = useState(false);
 
+  const updateFiles = (file) => {
+    // console.log(file);
+    const arr = [...fArray, file];
+    console.log(arr);
+    setfArray(arr);
+  }
+
 
   const handleLogout = () => {
     signOut(auth).then(() => {
@@ -44,11 +51,12 @@ export default function PdfItems() {
   const handleDelete = (name) => {
     const storage = getStorage(app, UPLOAD_LINK);
     const desertRef = ref(storage, name);
-    const arr = fArray?.filter((file) =>(file?.name == name));
+    const arr = fArray.filter((file) =>(file.name != name));
     setfArray(arr || []);
     deleteObject(desertRef).then(() => {
       ToastAndroid.show("Deleted File Successfully !!", ToastAndroid.SHORT);
       console.log("deleteObject function")
+      console.log(fArray);
     }).catch((error) => {
       console.log(error);
       ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
@@ -91,7 +99,7 @@ export default function PdfItems() {
         <Text>Choose a PDF to view</Text>
         {fArray ? fArray.map((file) => <SinglePdf file={file} key={file.name} />) :  <ActivityIndicator size="large" color="black" style={styles.loader} />}
       </ScrollView>
-      <UploadPdf login={login} />
+      <UploadPdf login={login} updateFiles={updateFiles} />
     </View>
   );
 }

@@ -2,17 +2,17 @@ import { StyleSheet, Text, View, TouchableOpacity, ToastAndroid, Dimensions } fr
 import * as DocumentPicker from 'expo-document-picker';
 import { useState } from 'react';
 import { app } from './firebaseConfig';
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from 'react-router-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import { USER_EMAIL, ERROR_MSG } from './AppConstant';
+import { USER_EMAIL, ERROR_MSG, UPLOAD_LINK } from './AppConstant';
 
 
 export default function UploadPdf(props) {
   const [doc, setDoc] = useState();
   const [uploading, setUploading] = useState(false);
 
-  const storage = getStorage(app, USER_EMAIL);
+  const storage = getStorage(app, UPLOAD_LINK);
   const navigate = useNavigate();
 
 
@@ -35,7 +35,7 @@ export default function UploadPdf(props) {
       return;
     }
 
-    const storageRef = ref(storage, doc?.name);
+    const storageRef = ref(storage, doc.name);
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
@@ -53,6 +53,12 @@ export default function UploadPdf(props) {
     //CORRECT ONE
     uploadBytes(storageRef, blob).then(() => {
       ToastAndroid.show("File Uploaded Successfully", ToastAndroid.SHORT);
+    }).then(() => {
+      const fileRef = ref(storage, doc.name);
+      const url = getDownloadURL(fileRef)
+      return url;
+    }).then((url) => {
+      props.updateFiles({name: doc.name, src: url});
     }).catch((error)=>{
       console.log(error, "uploadBytes");
       ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
