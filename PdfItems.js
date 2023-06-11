@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Button, ScrollView, ToastAndroid, Dimensions, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Button, ScrollView, ToastAndroid, Dimensions, ActivityIndicator, Share, FlatList } from 'react-native';
 import { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { ERROR_MSG, UPLOAD_LINK } from './AppConstant';
@@ -33,6 +33,27 @@ export default function PdfItems() {
       ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
     });
   }
+
+  const handleShare = async () => {
+      try {
+        const result = await Share.share({
+          message:
+            'Hey I am learning from Ishant Commerce Classes, download this app to get amazing materials \n\n https://play.google.com/store/apps/details?id=com.ishantclasses.tutorapp',
+        });
+        if (result.action === Share.sharedAction) {
+          if (result.activityType) {
+            // shared with activity type of result.activityType
+          } else {
+            // shared
+          }
+        } else if (result.action === Share.dismissedAction) {
+          // dismissed
+        }
+      } catch (error) {
+        Alert.alert(error.message);
+      }
+    };
+  
   
   useEffect(() => {
     (async () => {
@@ -63,42 +84,74 @@ export default function PdfItems() {
     });
   }
 
-  const SinglePdf = (props) => {
-    const fname = props.file.name
-    return (
+  const SinglePdf = ({file}) =>  (
       <View style={styles.pdfContainer}>
-        <Text>{props.file.name}</Text>
+        <Text>{file.item.name}</Text>
         <View style={styles.buttons}>
           <Link
-            to={"/download?" + props.file.src}
+            to={"/download?" + file.item.src}
             component={Button}
             style={styles.button}
           >
             <Text style={styles.btnText}>View</Text>
           </Link>
-          {login && <TouchableOpacity onPress={() => handleDelete(fname)} style={styles.button} >
+          {login && <TouchableOpacity onPress={() => handleDelete(file.item.name)} style={styles.button} >
             <Text style={styles.btnText}>Delete</Text>
           </TouchableOpacity>}
 
         </View>
       </View>
-    )
-  }
+    );
+  // const SinglePdf = (props) => {
+  //   console.log(props.file.item)
+  //   const fname = props.file.item.name
+  //   console.log(fname)
+  //   return (
+  //     <View style={styles.pdfContainer}>
+  //       <Text>{props.file.name}</Text>
+  //       <View style={styles.buttons}>
+  //         <Link
+  //           to={"/download?" + props.file.item.src}
+  //           component={Button}
+  //           style={styles.button}
+  //         >
+  //           <Text style={styles.btnText}>View</Text>
+  //         </Link>
+  //         {login && <TouchableOpacity onPress={() => handleDelete(fname)} style={styles.button} >
+  //           <Text style={styles.btnText}>Delete</Text>
+  //         </TouchableOpacity>}
+
+  //       </View>
+  //     </View>
+  //   )
+  // }
 
   return (
     <View style={styles.mainContainer}>
       <View style={styles.header}>
         <Text style={styles.title}>Ishant Commerce Classes</Text>
-        {login && <TouchableOpacity onPress={handleLogout}><Icon name='logout' color={'white'} size={25} style={styles.logout} /></TouchableOpacity> }
+        {login ? <TouchableOpacity onPress={handleLogout}><Icon name='logout' color={'white'} size={25} style={styles.logout} /></TouchableOpacity> : <TouchableOpacity onPress={handleShare}><Icon name='share-variant' color={'white'} size={25} style={styles.logout} /></TouchableOpacity> }
       </View>
-      <ScrollView
+      
+      {fArray ? <FlatList
+        style={styles.container}
+        // contentContainerStyle={styles.sview}
+        scrollEnabled={true}
+        data={fArray}
+        renderItem = { (file) => <SinglePdf file={file} key={file.name} /> }
+        keyExtractor={file => file.name}
+        ListHeaderComponent = {<Text style={styles.text}>Choose a PDF to view</Text>}
+      />
+        
+     :  <ActivityIndicator size="large" color="black" style={styles.loader} />}
+      {/* <ScrollView
         style={styles.container}
         contentContainerStyle={styles.sview}
         scrollEnabled={true}
       >
         <Text>Choose a PDF to view</Text>
         {fArray ? fArray.map((file) => <SinglePdf file={file} key={file.name} />) :  <ActivityIndicator size="large" color="black" style={styles.loader} />}
-      </ScrollView>
+      </ScrollView> */}
       <UploadPdf login={login} updateFiles={updateFiles} />
     </View>
   );
@@ -115,11 +168,12 @@ const styles = StyleSheet.create({
     paddingTop: 15
   },
   container: {
-    flexGrow: 1,
+    flexGrow: 0,
     display: 'flex',
     margin: 15,
     backgroundColor: '#fff',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    height: Dimensions.get('window').height*0.9
 
   },
   pdfContainer: {
@@ -156,6 +210,10 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start'
     
   },
+  text: {
+    
+    alignSelf: 'center'
+  },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -163,7 +221,7 @@ const styles = StyleSheet.create({
   },
   logout: {
     position: 'relative',
-    left: 72
+    left: Dimensions.get('window').width*0.2
   },
   buttons: {
     width: "100%",

@@ -73,8 +73,8 @@ export default function UploadPdf(props) {
 
   return (
     <View style={styles.container}>
-      {props.login ? <TouchableOpacity onPress={selectFile}><Text style={styles.uploadButton}>+</Text></TouchableOpacity> :
-      <TouchableOpacity onPress={handleLogin}><Text style={styles.loginButton}><Icon
+      {props.login ? <TouchableOpacity style={styles.buttonContainer} onPress={selectFile}><Text style={styles.uploadButton}>+</Text></TouchableOpacity> :
+      <TouchableOpacity onPress={handleLogin} style={styles.buttonContainer}><Text style={styles.loginButton}><Icon
       name='login'
       size={25}
       /></Text></TouchableOpacity>}
@@ -83,22 +83,36 @@ export default function UploadPdf(props) {
 }
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    paddingLeft: 7,
+    paddingRight: 5
+  },
   container: {
-    backgroundColor: '#000',
     position: "absolute",
     bottom: Dimensions.get('window').height*0.12,
     right: 20,
-    paddingVertical: 7,
-    paddingHorizontal: 15,
-    borderRadius: 10
+    // paddingVertical: 7,
+    // paddingHorizontal: 15,
+    // borderRadius: 10,
+    // backgroundColor: '#000',
+   
   },
   uploadButton: {
     color: "white",
     fontSize: 30,
+    paddingVertical: 6,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    backgroundColor: '#000',
+    
   },
   loginButton: {
     color: "white",
     fontSize: 30,
-    paddingVertical: 5
+    // paddingVertical: 5,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    backgroundColor: '#000',
   }
 });

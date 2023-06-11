@@ -30,8 +30,14 @@ export default function Login() {
             ToastAndroid.show("Signed In as a Teacher", ToastAndroid.SHORT);
             navigate('/pdfs');
         }).catch((error) => {
-            console.log(error,"onLogin function")
-            ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
+            console.log(error.code,"onLogin function")
+            if(error.code == "auth/wrong-password"){
+                ToastAndroid.show("It's a wrong password...Please Enter correct password", ToastAndroid.SHORT);
+            }
+            else{
+                ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
+            }
+            
         }) : ToastAndroid.show("Please Enter password to login as Teacher", ToastAndroid.SHORT);
     };
 
