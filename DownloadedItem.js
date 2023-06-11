@@ -1,16 +1,15 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useLocation, useNavigate } from 'react-router-native';
-import RNScreenRecordPrevent from 'react-native-screen-record-prevent';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Pdf from 'react-native-pdf';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 
 
 
 export default function DownloadedItem() {
-   useEffect(() => {
-    console.log(RNScreenRecordPrevent, "Screen Record zprevent")
-   })
+//    useEffect(() => {
+//     console.log(RNScreenRecordPrevent, "Screen Record zprevent")
+//    })
 
     const src = useLocation().search.slice(1);
     const source = { uri: src, cache: true }
