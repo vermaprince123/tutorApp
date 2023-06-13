@@ -1,14 +1,4 @@
-import {
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    View,
-    TextInput,
-    TouchableOpacity,
-    ToastAndroid,
-    Image,
-    Dimensions
-} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, TextInput, TouchableOpacity, ToastAndroid, Image, Dimensions } from 'react-native';
 import { ERROR_MSG, USER_EMAIL } from './AppConstant';
 import { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
@@ -30,14 +20,14 @@ export default function Login() {
             ToastAndroid.show("Signed In as a Teacher", ToastAndroid.SHORT);
             navigate('/pdfs');
         }).catch((error) => {
-            console.log(error.code,"onLogin function")
-            if(error.code == "auth/wrong-password"){
+            console.log(error.code, "onLogin function")
+            if (error.code == "auth/wrong-password") {
                 ToastAndroid.show("It's a wrong password...Please Enter correct password", ToastAndroid.SHORT);
             }
-            else{
+            else {
                 ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
             }
-            
+
         }) : ToastAndroid.show("Please Enter password to login as Teacher", ToastAndroid.SHORT);
     };
 
@@ -90,8 +80,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     logo: {
-        width: Dimensions.get('window').width*0.6,
-        height: Dimensions.get('window').width*0.6,
+        width: Dimensions.get('window').width * 0.6,
+        height: Dimensions.get('window').width * 0.6,
         resizeMode: 'contain'
     },
     container: {

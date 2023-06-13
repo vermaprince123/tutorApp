@@ -51,7 +51,7 @@ const fetchFiles = async () => {
             resolve(fArray);
         });
    }catch(e){
-
+    return [];
    }
 }
 

@@ -16,7 +16,6 @@ export default function PdfItems() {
   const [login, setLogin] = useState(false);
 
   const updateFiles = (file) => {
-    // console.log(file);
     const arr = [...fArray, file];
     console.log(arr);
     setfArray(arr);
@@ -28,33 +27,24 @@ export default function PdfItems() {
       global.user = null
       ToastAndroid.show("Signed Out of Teacher mode", ToastAndroid.SHORT);
     }).catch((error) => {
-      console.log(error,"handleLogout function")
+      console.log(error, "handleLogout function")
       global.user = null;
       ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
     });
   }
 
   const handleShare = async () => {
-      try {
-        const result = await Share.share({
-          message:
-            'Hey I am learning from Ishant Commerce Classes, download this app to get amazing materials \n\n https://play.google.com/store/apps/details?id=com.ishantclasses.tutorapp',
-        });
-        if (result.action === Share.sharedAction) {
-          if (result.activityType) {
-            // shared with activity type of result.activityType
-          } else {
-            // shared
-          }
-        } else if (result.action === Share.dismissedAction) {
-          // dismissed
-        }
-      } catch (error) {
-        Alert.alert(error.message);
-      }
-    };
-  
-  
+    try {
+      await Share.share({
+        message:
+          'Hey I am learning from Ishant Commerce Classes, download this app to get amazing materials \n\n https://play.google.com/store/apps/details?id=com.ishantclasses.tutorapp',
+      });
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
+
+
   useEffect(() => {
     (async () => {
       var arr = await fetchFiles();
@@ -72,7 +62,7 @@ export default function PdfItems() {
   const handleDelete = (name) => {
     const storage = getStorage(app, UPLOAD_LINK);
     const desertRef = ref(storage, name);
-    const arr = fArray.filter((file) =>(file.name != name));
+    const arr = fArray.filter((file) => (file.name != name));
     setfArray(arr || []);
     deleteObject(desertRef).then(() => {
       ToastAndroid.show("Deleted File Successfully !!", ToastAndroid.SHORT);
@@ -84,74 +74,41 @@ export default function PdfItems() {
     });
   }
 
-  const SinglePdf = ({file}) =>  (
-      <View style={styles.pdfContainer}>
-        <Text>{file.item.name}</Text>
-        <View style={styles.buttons}>
-          <Link
-            to={"/download?" + file.item.src}
-            component={Button}
-            style={styles.button}
-          >
-            <Text style={styles.btnText}>View</Text>
-          </Link>
-          {login && <TouchableOpacity onPress={() => handleDelete(file.item.name)} style={styles.button} >
-            <Text style={styles.btnText}>Delete</Text>
-          </TouchableOpacity>}
+  const SinglePdf = ({ file }) => (
+    <View style={styles.pdfContainer}>
+      <Text>{file.item.name}</Text>
+      <View style={styles.buttons}>
+        <Link
+          to={"/download?" + file.item.src}
+          component={Button}
+          style={styles.button}
+        >
+          <Text style={styles.btnText}>View</Text>
+        </Link>
+        {login && <TouchableOpacity onPress={() => handleDelete(file.item.name)} style={styles.button} >
+          <Text style={styles.btnText}>Delete</Text>
+        </TouchableOpacity>}
 
-        </View>
       </View>
-    );
-  // const SinglePdf = (props) => {
-  //   console.log(props.file.item)
-  //   const fname = props.file.item.name
-  //   console.log(fname)
-  //   return (
-  //     <View style={styles.pdfContainer}>
-  //       <Text>{props.file.name}</Text>
-  //       <View style={styles.buttons}>
-  //         <Link
-  //           to={"/download?" + props.file.item.src}
-  //           component={Button}
-  //           style={styles.button}
-  //         >
-  //           <Text style={styles.btnText}>View</Text>
-  //         </Link>
-  //         {login && <TouchableOpacity onPress={() => handleDelete(fname)} style={styles.button} >
-  //           <Text style={styles.btnText}>Delete</Text>
-  //         </TouchableOpacity>}
-
-  //       </View>
-  //     </View>
-  //   )
-  // }
+    </View>
+  );
 
   return (
     <View style={styles.mainContainer}>
       <View style={styles.header}>
         <Text style={styles.title}>Ishant Commerce Classes</Text>
-        {login ? <TouchableOpacity onPress={handleLogout}><Icon name='logout' color={'white'} size={25} style={styles.logout} /></TouchableOpacity> : <TouchableOpacity onPress={handleShare}><Icon name='share-variant' color={'white'} size={25} style={styles.logout} /></TouchableOpacity> }
+        {login ? <TouchableOpacity onPress={handleLogout}><Icon name='logout' color={'white'} size={25} style={styles.logout} /></TouchableOpacity> : <TouchableOpacity onPress={handleShare}><Icon name='share-variant' color={'white'} size={25} style={styles.logout} /></TouchableOpacity>}
       </View>
-      
+
       {fArray ? <FlatList
         style={styles.container}
-        // contentContainerStyle={styles.sview}
         scrollEnabled={true}
         data={fArray}
-        renderItem = { (file) => <SinglePdf file={file} key={file.name} /> }
+        renderItem={(file) => <SinglePdf file={file} key={file.name} />}
         keyExtractor={file => file.name}
-        ListHeaderComponent = {<Text style={styles.text}>Choose a PDF to view</Text>}
+        ListHeaderComponent={<Text style={styles.text}>Choose a PDF to view</Text>}
       />
-        
-     :  <ActivityIndicator size="large" color="black" style={styles.loader} />}
-      {/* <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.sview}
-        scrollEnabled={true}
-      >
-        <Text>Choose a PDF to view</Text>
-        {fArray ? fArray.map((file) => <SinglePdf file={file} key={file.name} />) :  <ActivityIndicator size="large" color="black" style={styles.loader} />}
-      </ScrollView> */}
+        : <ActivityIndicator size="large" color="black" style={styles.loader} />}
       <UploadPdf login={login} updateFiles={updateFiles} />
     </View>
   );
@@ -173,7 +130,7 @@ const styles = StyleSheet.create({
     margin: 15,
     backgroundColor: '#fff',
     flexDirection: 'column',
-    height: Dimensions.get('window').height*0.9
+    height: Dimensions.get('window').height * 0.9
 
   },
   pdfContainer: {
@@ -208,10 +165,10 @@ const styles = StyleSheet.create({
     // position: 'absolute',
     // top: -35,
     alignSelf: 'flex-start'
-    
+
   },
   text: {
-    
+
     alignSelf: 'center'
   },
   title: {
@@ -221,7 +178,7 @@ const styles = StyleSheet.create({
   },
   logout: {
     position: 'relative',
-    left: Dimensions.get('window').width*0.2
+    left: Dimensions.get('window').width * 0.2
   },
   buttons: {
     width: "100%",

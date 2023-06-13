@@ -1,8 +1,8 @@
 import { StyleSheet, View, StatusBar, useColorScheme } from 'react-native';
 import { NativeRouter, Route, Routes } from "react-router-native";
-import Login from './Login';
-import PdfItems from './PdfItems';
-import DownloadedItem from './DownloadedItem';
+import Login from './Components/Login';
+import PdfItems from './Components/PdfItems';
+import DownloadedItem from './Components/DownloadedItem';
 
 
 
