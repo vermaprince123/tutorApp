@@ -38,7 +38,7 @@ export default function Login() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={require('./assets/appLogo.png')} style={styles.logo} />
+            <Image source={require('../assets/appLogo.png')} style={styles.logo} />
             <View style={styles.iccName}>
                 <Text style={styles.nameTitle}>Ishant Commerce Classes</Text>
             </View>
