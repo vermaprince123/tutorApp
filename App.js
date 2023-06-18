@@ -9,28 +9,30 @@ import StudentLogin from './Components/StudentLogin';
 import UpdateNotice from './Components/UpdateNotice';
 import Notices from './Components/Notices';
 import EnrolledStudents from './Components/TeachersSection/EnrolledStudents';
+import Home from './Components/Home';
 
 
 
 
 export default function App() {
   return (
-    // <NativeRouter>
-    // <StatusBar barStyle={useColorScheme() === 'dark' ? 'light-content' : 'dark-content'} />
-    // <View style={styles.container}>
-    //   <Routes>
-    //     <Route path="/"  element={<Login />} />
-    //     <Route path="/download" element={<DownloadedItem />}/>
-    //     <Route path="/pdfs" element={<PdfItems />}/>
-    //   </Routes>
-    // </View>
-    // </NativeRouter>
+    <NativeRouter>
+    <StatusBar barStyle={useColorScheme() === 'dark' ? 'light-content' : 'dark-content'} />
+    <View style={styles.container}>
+      <Routes>
+        <Route path="/*"  element={<Home />} />
+        <Route path="/teacher-login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/home/*" element={<Home />} />
+      </Routes>
+    </View>
+    </NativeRouter>
     // <Register />
     // <StudentRequests/>
     // <StudentLogin />
     // <UpdateNotice />
     // <Notices />
-    <EnrolledStudents />
+    // <EnrolledStudents />
   );
 }
 

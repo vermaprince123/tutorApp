@@ -10,7 +10,7 @@ import UploadPdf from './UploadPdf';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
-export default function PdfItems() {
+export default function PdfItems({closeSideDrawer}) {
   const auth = getAuth(app);
   const [fArray, setfArray] = useState(null);
   const [login, setLogin] = useState(false);
@@ -57,6 +57,9 @@ export default function PdfItems() {
         setLogin(false);
       }
     });
+  //   return(() => {
+  //     closeSideDrawer();
+  // });  
   }, []);
 
   const handleDelete = (name) => {
@@ -95,10 +98,10 @@ export default function PdfItems() {
 
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.title}>Ishant Commerce Classes</Text>
         {login ? <TouchableOpacity onPress={handleLogout}><Icon name='logout' color={'white'} size={25} style={styles.logout} /></TouchableOpacity> : <TouchableOpacity onPress={handleShare}><Icon name='share-variant' color={'white'} size={25} style={styles.logout} /></TouchableOpacity>}
-      </View>
+      </View> */}
 
       {fArray ? <FlatList
         style={styles.container}
@@ -117,17 +120,19 @@ export default function PdfItems() {
 const styles = StyleSheet.create({
   mainContainer: {
     width: "100%",
-    position: 'relative',
-    top: 25,
+    // position: 'relative',
+    // top: 25,
     display: 'flex',
     flexDirection: 'column',
-    height: Dimensions.get('screen').height,
+    height: Dimensions.get('screen').height*0.85,
+    borderWidth: 1,
     paddingTop: 15
   },
   container: {
     flexGrow: 0,
     display: 'flex',
     margin: 15,
+    marginTop: 0,
     backgroundColor: '#fff',
     flexDirection: 'column',
     height: Dimensions.get('window').height * 0.9

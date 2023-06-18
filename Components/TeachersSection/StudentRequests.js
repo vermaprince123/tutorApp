@@ -4,7 +4,7 @@ import { getDatabase, ref, onValue, set, remove, get } from 'firebase/database'
 import {app} from '../firebaseConfig'
 import SingleStudentRequest from './SingleStudentRequest';
 
-export default function StudentRequests() {
+export default function StudentRequests({closeSideDrawer}) {
     const database = getDatabase(app);
     const studentRequestRef = ref(database, "studentRequests/");
 
@@ -24,6 +24,9 @@ export default function StudentRequests() {
         //     const data = snapshot.val();
         //     return data;
         //   });
+        return(() => {
+            closeSideDrawer();
+        })
     }, []);
 
     

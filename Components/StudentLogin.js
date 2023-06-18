@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, Button } from 'react-native'
+import { View, Text, TextInput, Button, TouchableOpacity } from 'react-native'
 import { ref, getDatabase, get } from 'firebase/database'
 
 import {app} from './firebaseConfig'
+import { Link, useNavigate } from 'react-router-native';
 
 
 export default function StudentLogin() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [stuClass, setStuClass] = useState("");
+
+    const navigate = useNavigate();
 
     const database = getDatabase(app);
 
@@ -33,6 +36,14 @@ export default function StudentLogin() {
         })
 
     }
+
+    const goToRegister = () => {
+        navigate("/register");
+    }
+
+    const goToLoginAsTeacher = () => {
+        navigate("/teacher-login");
+    }
     return (
         <View>
             <Text>Login</Text>
@@ -52,6 +63,13 @@ export default function StudentLogin() {
                 onChangeText={setPassword}
             />
             <Button title="Login" onPress={handleLogin} />
+            <TouchableOpacity onPress={goToRegister}>
+                <Text>Not Enrolled? Register Yourself</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={goToLoginAsTeacher}>
+                <Text>Login As Teacher</Text>
+            </TouchableOpacity>
+            {/* <Link to="/teacher-login">Login as Teacher</Link> */}
         </View>
     )
 }

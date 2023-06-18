@@ -18,7 +18,7 @@ export default function Login() {
         password ? signInWithEmailAndPassword(auth, email, password).then((userCredentials) => {
             global.user = userCredentials?.user;
             ToastAndroid.show("Signed In as a Teacher", ToastAndroid.SHORT);
-            navigate('/pdfs');
+            navigate('/home');
         }).catch((error) => {
             console.log(error.code, "onLogin function")
             if (error.code == "auth/wrong-password") {
@@ -33,7 +33,7 @@ export default function Login() {
 
     const stuLogin = () => {
         global.user = null;
-        navigate('/pdfs');
+        navigate('/');
     }
 
     return (
