@@ -15,7 +15,7 @@ export default function Register() {
     const database = getDatabase(app);
 
     const uploadData = () => {
-        const id = contactNumber+stuName.toLowerCase();
+        const id = contactNumber+stuName.split(" ")[0].toLowerCase();
         set(ref(database, "studentRequests/"+id), {
                 name: stuName,
                 school: schoolName,

@@ -5,6 +5,11 @@ import PdfItems from './Components/PdfItems';
 import DownloadedItem from './Components/DownloadedItem';
 import Register from './Components/Register';
 import StudentRequests from './Components/TeachersSection/StudentRequests';
+import StudentLogin from './Components/StudentLogin';
+import UpdateNotice from './Components/UpdateNotice';
+import Notices from './Components/Notices';
+import EnrolledStudents from './Components/TeachersSection/EnrolledStudents';
+
 
 
 
@@ -21,7 +26,11 @@ export default function App() {
     // </View>
     // </NativeRouter>
     // <Register />
-    <StudentRequests/>
+    // <StudentRequests/>
+    // <StudentLogin />
+    // <UpdateNotice />
+    // <Notices />
+    <EnrolledStudents />
   );
 }
 
