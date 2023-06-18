@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
 import { getDatabase, ref, onValue, set, remove, get } from 'firebase/database'
 import {app} from '../firebaseConfig'
+import SingleStudentRequest from './SingleStudentRequest';
 
 export default function StudentRequests() {
     const database = getDatabase(app);
@@ -23,7 +24,8 @@ export default function StudentRequests() {
         //     const data = snapshot.val();
         //     return data;
         //   });
-    }, [])
+    }, []);
+
     
   return (
     <View>
@@ -32,7 +34,7 @@ export default function StudentRequests() {
             // console.log(studentRequests[id], id);
             const student = studentRequests[id];
             return(
-                <Text key={id}>{student.name}</Text>
+                <SingleStudentRequest key={id} id={id} student={student}/>
             )
         })
          :<Text>Loading</Text>}
