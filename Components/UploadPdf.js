@@ -24,13 +24,13 @@ export default function UploadPdf(props) {
       setDoc(doc);
       uploadFileAsync(doc);
     } catch (error) {
-      console.log(error,"selectFile function");
+      console.log(error, "selectFile function");
       ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
     }
   }
 
   async function uploadFileAsync(doc) {
-    if(doc.size > 2 * 1024 * 1024){
+    if (doc.size > 2 * 1024 * 1024) {
       ToastAndroid.show("File Size should be less than 2 MB", ToastAndroid.SHORT);
       return;
     }
@@ -58,8 +58,8 @@ export default function UploadPdf(props) {
       const url = getDownloadURL(fileRef)
       return url;
     }).then((url) => {
-      props.updateFiles({name: doc.name, src: url});
-    }).catch((error)=>{
+      props.updateFiles({ name: doc.name, src: url });
+    }).catch((error) => {
       console.log(error, "uploadBytes");
       ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
     })
@@ -74,10 +74,10 @@ export default function UploadPdf(props) {
   return (
     <View style={styles.container}>
       {props.login ? <TouchableOpacity style={styles.buttonContainer} onPress={selectFile}><Text style={styles.uploadButton}>+</Text></TouchableOpacity> :
-      <TouchableOpacity onPress={handleLogin} style={styles.buttonContainer}><Text style={styles.loginButton}><Icon
-      name='login'
-      size={25}
-      /></Text></TouchableOpacity>}
+        <TouchableOpacity onPress={handleLogin} style={styles.buttonContainer}><Text style={styles.loginButton}><Icon
+          name='login'
+          size={25}
+        /></Text></TouchableOpacity>}
     </View>
   );
 }
@@ -89,13 +89,13 @@ const styles = StyleSheet.create({
   },
   container: {
     position: "absolute",
-    bottom: Dimensions.get('window').height*0.12,
+    bottom: Dimensions.get('window').height * 0.12,
     right: 20,
     // paddingVertical: 7,
     // paddingHorizontal: 15,
     // borderRadius: 10,
     // backgroundColor: '#000',
-   
+
   },
   uploadButton: {
     color: "white",
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 10,
     backgroundColor: '#000',
-    
+
   },
   loginButton: {
     color: "white",

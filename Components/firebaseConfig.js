@@ -14,7 +14,8 @@ const firebaseConfig = {
   storageBucket: "ishantcommerceclasses.appspot.com",
   messagingSenderId: "1050827289803",
   appId: "1:1050827289803:web:08a9ef2525189afb56974e",
-  measurementId: "G-3PPEV15CX6"
+  measurementId: "G-3PPEV15CX6",
+  databaseURL: "https://ishantcommerceclasses-default-rtdb.asia-southeast1.firebasedatabase.app/"
 }
 
 // Initialize Firebase

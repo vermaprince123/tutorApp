@@ -3,21 +3,25 @@ import { NativeRouter, Route, Routes } from "react-router-native";
 import Login from './Components/Login';
 import PdfItems from './Components/PdfItems';
 import DownloadedItem from './Components/DownloadedItem';
+import Register from './Components/Register';
+import StudentRequests from './Components/TeachersSection/StudentRequests';
 
 
 
 export default function App() {
   return (
-    <NativeRouter>
-    <StatusBar barStyle={useColorScheme() === 'dark' ? 'light-content' : 'dark-content'} />
-    <View style={styles.container}>
-      <Routes>
-        <Route path="/"  element={<Login />} />
-        <Route path="/download" element={<DownloadedItem />}/>
-        <Route path="/pdfs" element={<PdfItems />}/>
-      </Routes>
-    </View>
-    </NativeRouter>
+    // <NativeRouter>
+    // <StatusBar barStyle={useColorScheme() === 'dark' ? 'light-content' : 'dark-content'} />
+    // <View style={styles.container}>
+    //   <Routes>
+    //     <Route path="/"  element={<Login />} />
+    //     <Route path="/download" element={<DownloadedItem />}/>
+    //     <Route path="/pdfs" element={<PdfItems />}/>
+    //   </Routes>
+    // </View>
+    // </NativeRouter>
+    // <Register />
+    <StudentRequests/>
   );
 }
 
