@@ -73,11 +73,7 @@ export default function UploadPdf(props) {
 
   return (
     <View style={styles.container}>
-      {props.login ? <TouchableOpacity style={styles.buttonContainer} onPress={selectFile}><Text style={styles.uploadButton}>+</Text></TouchableOpacity> :
-        <TouchableOpacity onPress={handleLogin} style={styles.buttonContainer}><Text style={styles.loginButton}><Icon
-          name='login'
-          size={25}
-        /></Text></TouchableOpacity>}
+      <TouchableOpacity style={styles.buttonContainer} onPress={selectFile}><Text style={styles.uploadButton}>+</Text></TouchableOpacity> 
     </View>
   );
 }

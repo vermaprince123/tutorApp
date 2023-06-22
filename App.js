@@ -20,10 +20,11 @@ export default function App() {
     <StatusBar barStyle={useColorScheme() === 'dark' ? 'light-content' : 'dark-content'} />
     <View style={styles.container}>
       <Routes>
-        <Route path="/*"  element={<Home />} />
+        <Route path="/"  element={<StudentLogin />} />
         <Route path="/teacher-login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/home/*" element={<Home />} />
+        <Route path="/download" element={<DownloadedItem  />} />
       </Routes>
     </View>
     </NativeRouter>

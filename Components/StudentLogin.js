@@ -24,14 +24,20 @@ export default function StudentLogin() {
         get(studentRef).then((data) => {
             if(data && data.val()){
                 if(data.val().password == password){
-                    console.log("Logged In")
+                    console.log("Logged In");
+                    global.user = {
+                        user: "student",
+                        class: stuClass,
+                        ...data.val()
+                    }
+                    navigate('/home/?'+stuClass);
                 }
                 else{
-                    console.log("Invalid Password")
+                    console.log("Invalid Password");
                 }
             }
             else{
-                console.log("Invalid Username or class")
+                console.log("Invalid Username or class");
             }
         })
 

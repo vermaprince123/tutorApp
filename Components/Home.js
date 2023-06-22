@@ -39,7 +39,7 @@ export default function Home() {
       <Routes>
         <Route path="/student-requests" element={<StudentRequests closeSideDrawer={closeSideDrawer} />}/>
         <Route path="/enrolled-students" element={<EnrolledStudents closeSideDrawer={closeSideDrawer}/>}/>
-        <Route path="/main-content/*" element={<MainContent />} />
+        <Route path="/*" element={<MainContent />} />
       </Routes>
       </View>
       <View style={[styles.drawerContainer, { display: drawerVisibility }]}>

@@ -4,13 +4,10 @@ import { app } from './firebaseConfig';
 const storage = getStorage(app, "gs://ishantcommerceclasses.appspot.com");
 
 
-var fArray = [];
-
-
-const fetchF = async (filePath) => {
-    
-    const listRef = ref(storage, filePath);
-    console.log(filePath, "reffff")
+const fetchF = async (stuClass) => {
+    var fArray = [];
+    const listRef = ref(storage, "/class"+stuClass);
+    console.log(stuClass, "reffff")
     // console.log(storage)
     if (fArray.length > 0) {
         fArray = [];
@@ -49,9 +46,9 @@ const fetchF = async (filePath) => {
 }
 
 
-const fetchFiles = async (filePath) => {
+const fetchPdfs = async (stuClass) => {
     try {
-        await fetchF(filePath);
+        var fArray = await fetchF(stuClass);
         return new Promise((resolve, reject) => {
             resolve(fArray);
         });
@@ -61,4 +58,4 @@ const fetchFiles = async (filePath) => {
 }
 
 
-export default fetchFiles;
+export default fetchPdfs;

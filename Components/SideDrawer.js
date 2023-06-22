@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-nati
 import { Link } from 'react-router-native';
 
 export default function SideDrawer({ closeSideDrawer }) {
+    const isTeacherLoggedIn = (global.user.user == "teacher");
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={closeSideDrawer}>
@@ -10,15 +11,10 @@ export default function SideDrawer({ closeSideDrawer }) {
             </TouchableOpacity>
             <Text>Side Drawer</Text>
 
-            <Link to="/student-requests"><Text>Student Requests</Text></Link>
-            <Link to="/main-content"><Text>Class 11</Text></Link>
-            <Link to="/enrolled-students"><Text>Enrolled Students</Text></Link>
-
-            {/* <TouchableOpacity>
-                <Text></Text>
-            </TouchableOpacity> */}
-            {/* <Link to="/student-requests">Student Requests</Link>
-            <Link to="/enrolled-students">Enrolled Students</Link> */}
+            {isTeacherLoggedIn && <><Link to="/home/student-requests"><Text>Student Requests</Text></Link>
+            <Link to="/home/main-content?11"><Text>Class 11</Text></Link>
+            <Link to="/home/main-content?12"><Text>Class 12</Text></Link>
+            <Link to="/home/enrolled-students"><Text>Enrolled Students</Text></Link></>}
         </View>
     )
 }

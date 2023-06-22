@@ -16,7 +16,10 @@ export default function Login() {
     const onLogin = () => {
         const email = USER_EMAIL;
         password ? signInWithEmailAndPassword(auth, email, password).then((userCredentials) => {
-            global.user = userCredentials?.user;
+            global.user = {
+                user: "teacher",
+                ...userCredentials?.user
+            }
             ToastAndroid.show("Signed In as a Teacher", ToastAndroid.SHORT);
             navigate('/home');
         }).catch((error) => {
@@ -32,7 +35,6 @@ export default function Login() {
     };
 
     const stuLogin = () => {
-        global.user = null;
         navigate('/');
     }
 

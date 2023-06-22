@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { Link } from 'react-router-native';
 
-export default function BottomNavigator() {
+export default function BottomNavigator({stuClass}) {
+    console.log(stuClass, "BN")
     useEffect(()=>{
         return(() =>{
             console.log("Unmounting")
@@ -10,10 +11,10 @@ export default function BottomNavigator() {
     }, [])
   return (
     <View style={styles.bottomTab}>
-         <Link to="/main-content/pdfs"><Text>A</Text></Link>
-         <Link to="/main-content/assignments"><Text>B</Text></Link>
-         <Link to="/main-content/notices"><Text>C</Text></Link>
-         <Link to="/main-content/tests"><Text>D</Text></Link>
+         <Link to={"/home/pdfs?"+stuClass}><Text>A</Text></Link>
+         <Link to={"/home/assignments?"+stuClass}><Text>B</Text></Link>
+         <Link to={"/home/notices?"+stuClass}><Text>C</Text></Link>
+         <Link to={"/home/tests?"+stuClass}><Text>D</Text></Link>
     </View>
   )
 }
@@ -25,6 +26,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         gap: 50,
         height: 50,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginLeft: 20
     }
 })

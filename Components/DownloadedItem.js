@@ -16,7 +16,7 @@ export default function DownloadedItem() {
     const navigate = useNavigate();
 
     const goBack = () => {
-        navigate('/pdfs');
+        navigate(-1);
     }
     return (
         <View style={styles.container}>

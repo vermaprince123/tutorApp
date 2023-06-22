@@ -1,19 +1,33 @@
-import { StyleSheet, Text, View, TouchableOpacity, Button, ScrollView, ToastAndroid, Dimensions, ActivityIndicator, Share, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Button, ToastAndroid, Dimensions, ActivityIndicator, FlatList } from 'react-native';
 import { useEffect, useState } from 'react';
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { ERROR_MSG, UPLOAD_LINK } from './AppConstant';
 import { app } from './firebaseConfig';
 import { getStorage, ref, deleteObject } from "firebase/storage";
 import fetchFiles from './fetchFiles';
 import { Link } from "react-router-native";
 import UploadPdf from './UploadPdf';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useLocation } from 'react-router-native';
 
 
-export default function PdfItems({closeSideDrawer}) {
-  const auth = getAuth(app);
+export default function PdfItems(props) {
+  console.log(props,"prps");
+  
+  console.log("/"+props.prefix+props.stuClass);
+
+  const stuClass = (global.user.user == "student")  ? global.user.class : useLocation().search.slice(1);
+
+  // console.log(stuClass, "search param");
+  const [filePath, setFilePath] = useState("");
   const [fArray, setfArray] = useState(null);
-  const [login, setLogin] = useState(false);
+  const isTeacherLoggedIn = (global.user.user === "teacher");
+
+  if(filePath !== "/"+props.prefix+stuClass){
+
+    setFilePath("/"+props.prefix+stuClass);
+    console.log(filePath, "ifff")
+  }
+ 
 
   const updateFiles = (file) => {
     const arr = [...fArray, file];
@@ -21,46 +35,12 @@ export default function PdfItems({closeSideDrawer}) {
     setfArray(arr);
   }
 
-
-  const handleLogout = () => {
-    signOut(auth).then(() => {
-      global.user = null
-      ToastAndroid.show("Signed Out of Teacher mode", ToastAndroid.SHORT);
-    }).catch((error) => {
-      console.log(error, "handleLogout function")
-      global.user = null;
-      ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
-    });
-  }
-
-  const handleShare = async () => {
-    try {
-      await Share.share({
-        message:
-          'Hey I am learning from Ishant Commerce Classes, download this app to get amazing materials \n\n https://play.google.com/store/apps/details?id=com.ishantclasses.tutorapp',
-      });
-    } catch (error) {
-      Alert.alert(error.message);
-    }
-  };
-
-
   useEffect(() => {
     (async () => {
-      var arr = await fetchFiles();
+      var arr = await fetchFiles(filePath);
       setfArray(arr || []);
     })();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setLogin(true);
-      } else {
-        setLogin(false);
-      }
-    });
-  //   return(() => {
-  //     closeSideDrawer();
-  // });  
-  }, []);
+  }, [filePath]);
 
   const handleDelete = (name) => {
     const storage = getStorage(app, UPLOAD_LINK);
@@ -88,7 +68,7 @@ export default function PdfItems({closeSideDrawer}) {
         >
           <Text style={styles.btnText}>View</Text>
         </Link>
-        {login && <TouchableOpacity onPress={() => handleDelete(file.item.name)} style={styles.button} >
+        {isTeacherLoggedIn && <TouchableOpacity onPress={() => handleDelete(file.item.name)} style={styles.button} >
           <Text style={styles.btnText}>Delete</Text>
         </TouchableOpacity>}
 
@@ -98,10 +78,6 @@ export default function PdfItems({closeSideDrawer}) {
 
   return (
     <View style={styles.mainContainer}>
-      {/* <View style={styles.header}>
-        <Text style={styles.title}>Ishant Commerce Classes</Text>
-        {login ? <TouchableOpacity onPress={handleLogout}><Icon name='logout' color={'white'} size={25} style={styles.logout} /></TouchableOpacity> : <TouchableOpacity onPress={handleShare}><Icon name='share-variant' color={'white'} size={25} style={styles.logout} /></TouchableOpacity>}
-      </View> */}
 
       {fArray ? <FlatList
         style={styles.container}
@@ -112,7 +88,8 @@ export default function PdfItems({closeSideDrawer}) {
         ListHeaderComponent={<Text style={styles.text}>Choose a PDF to view</Text>}
       />
         : <ActivityIndicator size="large" color="black" style={styles.loader} />}
-      <UploadPdf login={login} updateFiles={updateFiles} />
+      {isTeacherLoggedIn && <UploadPdf updateFiles={updateFiles} />}
+
     </View>
   );
 }
@@ -120,11 +97,9 @@ export default function PdfItems({closeSideDrawer}) {
 const styles = StyleSheet.create({
   mainContainer: {
     width: "100%",
-    // position: 'relative',
-    // top: 25,
     display: 'flex',
     flexDirection: 'column',
-    height: Dimensions.get('screen').height*0.85,
+    height: Dimensions.get('screen').height * 0.85,
     borderWidth: 1,
     paddingTop: 15
   },
@@ -136,7 +111,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexDirection: 'column',
     height: Dimensions.get('window').height * 0.9
-
   },
   pdfContainer: {
     padding: 15,
@@ -162,13 +136,10 @@ const styles = StyleSheet.create({
     height: 50,
     width: "100%",
     padding: 10,
-    // justifyContent: 'center',
     display: 'flex',
     alignItems: 'center',
     color: 'white',
     flexDirection: 'row',
-    // position: 'absolute',
-    // top: -35,
     alignSelf: 'flex-start'
 
   },
