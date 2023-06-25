@@ -17,7 +17,6 @@ export default function PdfItems(props) {
 
   const stuClass = (global.user.user == "student")  ? global.user.class : useLocation().search.slice(1);
 
-  // console.log(stuClass, "search param");
   const [filePath, setFilePath] = useState("");
   const [fArray, setfArray] = useState(null);
   const isTeacherLoggedIn = (global.user.user === "teacher");
@@ -88,7 +87,7 @@ export default function PdfItems(props) {
         ListHeaderComponent={<Text style={styles.text}>Choose a PDF to view</Text>}
       />
         : <ActivityIndicator size="large" color="black" style={styles.loader} />}
-      {isTeacherLoggedIn && <UploadPdf updateFiles={updateFiles} />}
+      {isTeacherLoggedIn && <UploadPdf updateFiles={updateFiles} filePath={filePath} />}
 
     </View>
   );

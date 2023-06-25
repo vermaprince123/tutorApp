@@ -1,8 +1,13 @@
 import React from 'react'
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
-import { Link } from 'react-router-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, ToastAndroid } from 'react-native'
+import { Link, useNavigate } from 'react-router-native';
 
-export default function SideDrawer({ closeSideDrawer }) {
+import { ERROR_MSG } from './AppConstant';
+
+export default function SideDrawer({ closeSideDrawer, handleSignOut }) {
+    const navigate = useNavigate();
+    
+
     const isTeacherLoggedIn = (global.user.user == "teacher");
     return (
         <View style={styles.container}>
@@ -12,9 +17,13 @@ export default function SideDrawer({ closeSideDrawer }) {
             <Text>Side Drawer</Text>
 
             {isTeacherLoggedIn && <><Link to="/home/student-requests"><Text>Student Requests</Text></Link>
-            <Link to="/home/main-content?11"><Text>Class 11</Text></Link>
-            <Link to="/home/main-content?12"><Text>Class 12</Text></Link>
-            <Link to="/home/enrolled-students"><Text>Enrolled Students</Text></Link></>}
+                <Link to="/home/main-content?11"><Text>Class 11</Text></Link>
+                <Link to="/home/main-content?12"><Text>Class 12</Text></Link>
+                <Link to="/home/enrolled-students"><Text>Enrolled Students</Text></Link></>}
+
+            <TouchableOpacity onPress={handleSignOut}>
+                <Text>Sign Out</Text>
+            </TouchableOpacity>
         </View>
     )
 }

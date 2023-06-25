@@ -4,12 +4,12 @@ import {getDatabase, ref, get} from 'firebase/database'
 import { app } from './firebaseConfig'
 import SingleNotice from './SingleNotice';
 
-export default function ShowNotices() {
+export default function ShowNotices({stuClass}) {
   const [notices, setNotices] = useState(null);
   const [noticeIds, setNoticeIds] = useState([]);
 
   const database = getDatabase(app);
-  const noticesRef = ref(database, "notices/");
+  const noticesRef = ref(database, "notices/class" + stuClass);
 
   useEffect(()=> {
     get(noticesRef).then((data)=>{

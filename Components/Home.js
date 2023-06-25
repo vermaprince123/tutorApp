@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
-import { Text, View, TouchableOpacity, SafeAreaView, StyleSheet, Dimensions } from 'react-native';
+import { Text, View, TouchableOpacity, SafeAreaView, StyleSheet, Dimensions, ToastAndroid } from 'react-native';
 import SideDrawer from './SideDrawer';
-import { Routes, Route, Link } from 'react-router-native';
+import { Routes, Route, Link, useNavigate } from 'react-router-native';
 import StudentRequests from './TeachersSection/StudentRequests';
 import EnrolledStudents from './TeachersSection/EnrolledStudents';
 import PdfItems from './PdfItems';
 import MainContent from './MainContent';
+import { getAuth, signOut } from 'firebase/auth';
 
 
 export default function Home() {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
+  const navigate = useNavigate();
   const openSideDrawer = () => {
     console.log("Opening")
     setIsDrawerOpen(true)
@@ -21,6 +22,27 @@ export default function Home() {
     console.log("closing");
     setIsDrawerOpen(false);
   }
+
+  console.log(global.user);
+
+  const handleSignOut = () => {
+
+    if (global.user && global.user.user === "teacher") {
+        const auth = getAuth();
+        signOut(auth).then(() => {
+            ToastAndroid.show("Signed out of Teacher mode", ToastAndroid.SHORT);
+        }).catch((error) => {
+            ToastAndroid.show(ERROR_MSG + " Please Retry", ToastAndroid.SHORT);
+        });
+    }
+    else{
+        ToastAndroid.show("Signed out successfully", ToastAndroid.SHORT);
+    }
+
+    global.user = null;
+    navigate("/login");
+}
+
   const drawerVisibility = isDrawerOpen ? 'flex' : 'none';
   return (
     <SafeAreaView style={styles.homeContainer}>
@@ -43,7 +65,7 @@ export default function Home() {
       </Routes>
       </View>
       <View style={[styles.drawerContainer, { display: drawerVisibility }]}>
-        <SideDrawer closeSideDrawer={closeSideDrawer} />
+        <SideDrawer closeSideDrawer={closeSideDrawer} handleSignOut = {handleSignOut} />
       </View>
     </SafeAreaView>
   )
