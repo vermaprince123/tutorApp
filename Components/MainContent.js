@@ -1,20 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { Route, Routes, useLocation } from 'react-router-native';
 import PdfItems from './PdfItems';
 import Notices from './Notices';
 import BottomNavigator from './BottomNavigator';
 
-export default function MainContent() {
+export default function MainContent({closeSideDrawer}) {
   const stuClass = (global.user.user === "teacher") ? useLocation().search.slice(1) : "";
-  console.log(stuClass, "classssss")
+  
+  useEffect(() => {
+    return(() => {
+      closeSideDrawer();
+    })
+  }, [])
+
   return (
     <View style={styles.container}>
       <View style={styles.mainContainer} stuClass={stuClass}>
         <Routes>
           <Route path="/" element={<PdfItems prefix="class" stuClass={stuClass} />} />
           <Route path="/assignments" element={<PdfItems prefix="assignments" stuClass={stuClass} />} />
-          <Route path="/notices" element={<Notices stuClass={stuClass} />} />
+          <Route path="/notices/*" element={<Notices stuClass={stuClass} />} />
           <Route path="/tests" element={<PdfItems prefix="tests" stuClass={stuClass} />} />
         </Routes>
       </View>

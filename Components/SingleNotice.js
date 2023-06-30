@@ -3,20 +3,26 @@ import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { getDatabase, ref, remove } from 'firebase/database';
 
 import { app } from './firebaseConfig';
+import { useNavigate } from 'react-router-native';
 
-export default function SingleNotice({ notice, id }) {
+export default function SingleNotice({ notice, id, stuClass, deleteNotice }) {
   const database = getDatabase(app);
-  const noticeRef = ref(database, "notices/" + id);
+  const noticeRef = ref(database, "notices/class"+ stuClass+"/" + id);
   const isTeacherLoggedIn = (global.user.user === "teacher");
+  const navigate = useNavigate();
 
 
   const handleDelete = () => {
     console.log("Deleting");
+    console.log(noticeRef)
     remove(noticeRef);
+    deleteNotice(id);
   }
 
   const handleEdit = () => {
-    console.log("Editing")
+    const searchParam = "?" + id + "?" + notice.title + "?" + notice.description + "?" + stuClass;
+    navigate("/home/notices/add-edit-notice" + searchParam);
+
   }
   return (
     <View style={styles.detailContainer}>

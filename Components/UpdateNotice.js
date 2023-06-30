@@ -1,40 +1,136 @@
-import React, { useState } from 'react'
-import { View, Text, TextInput, Button } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet, KeyboardAvoidingView } from 'react-native'
 import { getDatabase, ref, set } from 'firebase/database';
 
 import { app } from './firebaseConfig';
+import { useLocation, useNavigate } from 'react-router-native';
 
 
 export default function UpdateNotice() {
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
+  console.log("Update Notice")
+  const location = useLocation();
+  const arr = location.search.split("?");
+  console.log(arr);
+  
+  const navigate = useNavigate();
+  const [title, setTitle] = useState(arr[2]);
+  const [description, setDescription] = useState(arr[3]);
 
-    const database = getDatabase(app);
+  const [stuClass, setStuClass] = useState(arr[4]);
+  const [stuId, setstuId] = useState(arr[1]);
 
-    const handleSubmit = () => {
-        const id = Date.now();
-        const noticeRef = ref(database, "class11/notices/" + id);
-        console.log(noticeRef);
+  // useEffect(() => {
+  //   if (arr.length == 5) {
+  //     stuId = arr[1];
+  //     setTitle(arr[2]);
+  //     setDescription(arr[3]);
+  //     stuClass = arr[4];
+  //   }
+  // }, []);
 
-        set(noticeRef, {
-          title: title,
-          description: description
-        })
-    }
+  const database = getDatabase(app);
+
+  const handleSubmit = () => {
+    const id = stuId != "" ? stuId : Date.now();
+    const noticeRef = ref(database, "/notices/" +"class" + stuClass + "/" + id);
+    console.log(noticeRef);
+    console.log(title, "dwewe");
+    set(noticeRef, {
+      title: title,
+      description: description
+    })
+    navigate(-1);
+  }
+
+  const handleCancel = () => {
+    navigate(-1);
+  }
   return (
-    <View>
-        <Text>Add/ Update a Notice</Text>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Add/ Edit Notice</Text>
+      </View>
+      <KeyboardAvoidingView style={styles.form}>
         <TextInput
-        placeholder="Title"
-        value={title}
-        onChangeText={setTitle}
+          placeholder="Title"
+          value={title}
+          onChangeText={setTitle}
+          style={styles.input}
         />
         <TextInput
-        placeholder="Description"
-        value={description}
-        onChangeText={setDescription}
+          placeholder="Description"
+          value={description}
+          onChangeText={setDescription}
+          style={styles.input}
         />
-        <Button title="Submit" onPress={handleSubmit}/>
+        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+          <Text style={styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleCancel} style={styles.button}>
+          <Text style={styles.buttonText}>Cancel</Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
+  header: {
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  form: {
+    width: 300,
+    margin: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 15,
+    textAlign: 'center',
+    // alignItems: 'center'
+  },
+  input: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    padding: 10,
+  },
+  button: {
+    width: 300,
+    padding: 10,
+    height: 40,
+    backgroundColor: '#000',
+    color: '#fff',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center'
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white'
+  },
+  otherLinks: {
+    marginTop: 20,
+    display: 'flex',
+    justifyContent: 'center',
+    gap: 15
+  },
+  otherLinkText: {
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+    fontSize: 15
+  }
+
+})

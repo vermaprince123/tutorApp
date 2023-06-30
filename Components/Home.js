@@ -15,6 +15,12 @@ export default function Home() {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const navigate = useNavigate();
+
+
+  const isTeacherLoggedIn = (global.user.user === "teacher");
+
+
+
   const openSideDrawer = () => {
     console.log("Opening")
     setIsDrawerOpen(true)
@@ -49,10 +55,15 @@ export default function Home() {
   return (
     <SafeAreaView style={styles.homeContainer}>
       <View style={styles.header}>
-        {/* <Text style={styles.title}>Ishant Commerce Classes</Text> */}
-        <TouchableOpacity onPress={openSideDrawer}>
+        {isTeacherLoggedIn && <TouchableOpacity onPress={openSideDrawer}>
           <Text style={styles.openDrawerButton}>
             <Icon name="menu" size={30} color="#fff"></Icon>
+          </Text>
+        </TouchableOpacity>}
+        <Text style={styles.title}>  Ishant Commerce Classes</Text>
+        <TouchableOpacity onPress={handleSignOut} style={styles.logOutButtonContainer}>
+          <Text style={styles.logOutButton}>
+            <Icon name="logout" size={30} color="#fff"></Icon>
           </Text>
         </TouchableOpacity>
       </View>
@@ -61,7 +72,7 @@ export default function Home() {
         <Routes>
           <Route path="/student-requests" element={<StudentRequests closeSideDrawer={closeSideDrawer} />} />
           <Route path="/enrolled-students" element={<EnrolledStudents closeSideDrawer={closeSideDrawer} />} />
-          <Route path="/*" element={<MainContent />} />
+          <Route path="/*" element={<MainContent closeSideDrawer={closeSideDrawer} />} />
         </Routes>
       </View>
       <View style={[styles.drawerContainer, { display: drawerVisibility }]}>
@@ -106,5 +117,18 @@ const styles = StyleSheet.create({
   },
   openDrawerButton: {
     color: 'white'
+  },
+  logOutButton: {
+    color: 'white',
+   
+  },
+  logOutButtonContainer: {
+    position: 'absolute',
+    right: 2
+  },
+  title: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: 600
   }
 })

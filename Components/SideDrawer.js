@@ -1,16 +1,40 @@
 import React from 'react'
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity, ToastAndroid, Image } from 'react-native'
-import { Link, useNavigate } from 'react-router-native';
+import { Link, useNavigate, useLocation } from 'react-router-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import { ERROR_MSG } from './AppConstant';
+import { useRef } from 'react';
 
 
 export default function SideDrawer({ closeSideDrawer, handleSignOut }) {
-    const navigate = useNavigate();
+    const location = useLocation();
+    console.log(location, "LOCATION");
+    const path = location.pathname.replace("/home", "");
+    const search = location.search.replace("?", "");
+
 
 
     const isTeacherLoggedIn = (global.user.user == "teacher");
+
+    const activeScreen = useRef("enrolled-students");
+
+    if (path == "/enrolled-students") {
+        activeScreen.current = "enrolled-students"
+    }
+    else if (path == "/student-requests") {
+        activeScreen.current = "student-requests"
+    }
+    else {
+        if (search == "11") {
+            activeScreen.current = "class11"
+        }
+        else {
+            activeScreen.current = "class12"
+        }
+    }
+
+
     return (
         <View style={styles.container} elevation={7}>
             <Image source={require('../assets/appLogo.png')} style={styles.logo} />
@@ -22,20 +46,32 @@ export default function SideDrawer({ closeSideDrawer, handleSignOut }) {
             </TouchableOpacity>
 
 
-            {isTeacherLoggedIn && <View style={styles.navLinkContainer}>
-                <Link to="/home/enrolled-students" component={TouchableOpacity} style={styles.navLink}>
-                    <Text style={styles.navLinkText}>Enrolled Students</Text>
+            <View style={styles.navLinkContainer}>
+                <Link to="/home/enrolled-students" component={TouchableOpacity}
+                    style={activeScreen.current == "enrolled-students" ? styles.activeNavLink : styles.navLink}>
+                    <Text style={activeScreen.current == "enrolled-students" ? styles.activeNavLinkText : styles.navLinkText}>
+                        Enrolled Students
+                    </Text>
                 </Link>
-                <Link to="/home/student-requests" component={TouchableOpacity} style={styles.navLink}>
-                    <Text style={styles.navLinkText}>Student Requests</Text>
+                <Link to="/home/student-requests" component={TouchableOpacity}
+                    style={activeScreen.current == "student-requests" ? styles.activeNavLink : styles.navLink}>
+                    <Text style={activeScreen.current == "student-requests" ? styles.activeNavLinkText : styles.navLinkText}>
+                        Student Requests
+                    </Text>
                 </Link>
-                <Link to="/home/main-content?11" component={TouchableOpacity} style={styles.navLink}>
-                    <Text style={styles.navLinkText}>Class 11</Text>
+                <Link to="/home/main-content?11" component={TouchableOpacity}
+                    style={activeScreen.current == "class11" ? styles.activeNavLink : styles.navLink}>
+                    <Text style={activeScreen.current == "class11" ? styles.activeNavLinkText : styles.navLinkText}>
+                        Class 11
+                    </Text>
                 </Link>
-                <Link to="/home/main-content?12" component={TouchableOpacity} style={styles.navLink}>
-                    <Text style={styles.navLinkText}>Class 12</Text>
+                <Link to="/home/main-content?12" component={TouchableOpacity}
+                    style={activeScreen.current == "class12" ? styles.activeNavLink : styles.navLink}>
+                    <Text style={activeScreen.current == "class12" ? styles.activeNavLinkText : styles.navLinkText}>
+                        Class 12
+                    </Text>
                 </Link>
-            </View>}
+            </View>
 
             <TouchableOpacity onPress={handleSignOut}>
                 <Text>Sign Out</Text>
@@ -88,7 +124,7 @@ const styles = StyleSheet.create({
         gap: 20
         // alignSelf: 'center'
     },
-    navLink: {
+    activeNavLink: {
         width: "90%",
         padding: 10,
         height: 40,
@@ -99,10 +135,26 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center'
     },
-    navLinkText: {
+    activeNavLinkText: {
         fontSize: 14,
         fontWeight: 'bold',
         color: 'white'
+    },
+    navLink: {
+        width: "90%",
+        padding: 10,
+        height: 40,
+        backgroundColor: '#fff',
+        color: '#000',
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center'
+    },
+    navLinkText: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#000'
     },
 
 });

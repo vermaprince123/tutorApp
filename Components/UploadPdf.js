@@ -69,7 +69,7 @@ export default function UploadPdf(props) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} elevation={7}>
       <TouchableOpacity style={styles.buttonContainer} onPress={selectFile}><Text style={styles.uploadButton}>+</Text></TouchableOpacity> 
     </View>
   );
@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
   },
   container: {
     position: "absolute",
-    bottom: Dimensions.get('window').height * 0.12,
-    right: 20,
+    bottom: Dimensions.get('window').height * 0.02,
+    right: 17,
     // paddingVertical: 7,
     // paddingHorizontal: 15,
     // borderRadius: 10,
