@@ -98,8 +98,7 @@ const styles = StyleSheet.create({
     width: "100%",
     display: 'flex',
     flexDirection: 'column',
-    height: Dimensions.get('screen').height * 0.85,
-    borderWidth: 1,
+    height: Dimensions.get('screen').height * 0.75,
     paddingTop: 15
   },
   container: {

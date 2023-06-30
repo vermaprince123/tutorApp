@@ -1,6 +1,6 @@
 import { getDatabase, ref, remove } from 'firebase/database';
 import React from 'react';
-import { Button, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { app } from '../firebaseConfig';
 
 export default function SingleEnrolledStudent({id, student, stuClass}) {
@@ -12,11 +12,43 @@ export default function SingleEnrolledStudent({id, student, stuClass}) {
         remove(studentRef);
     }
   return (
-    <View>
-        <Text>{student.name}</Text>
+    <View style={styles.detailContainer}>
+        <Text>{student.name},</Text>
         <Text>Mob: {student.contact}</Text>
         <Text>Studies in {student.school}</Text>
-        <Button title="Remove" onPress={removeStudent}/>
+        <TouchableOpacity  onPress={removeStudent} style={styles.button}>
+          <Text style={styles.btnText}>Remove</Text>
+          </TouchableOpacity>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  detailContainer: {
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 5,
+    borderColor: 'light-grey',
+    shadowColor: 'black',
+    borderWidth: .5,
+    borderRadius: 10,
+    width: "100%"
+  },
+  button: {
+    width: "40%",
+    marginTop: 5,
+    marginHorizontal: 10,
+    padding: 5,
+    height: 40,
+    backgroundColor: '#000',
+    color: '#fff',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center'
+  },
+  btnText: {
+    color: 'white'
+  },
+});

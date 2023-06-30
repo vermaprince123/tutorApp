@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text } from 'react-native'
+import React, { useEffect, useState,  } from 'react'
+import { View, Text, StyleSheet } from 'react-native'
 import { getDatabase, ref, onValue, set, remove, get } from 'firebase/database'
 import {app} from '../firebaseConfig'
 import SingleStudentRequest from './SingleStudentRequest';
@@ -20,10 +20,6 @@ export default function StudentRequests({closeSideDrawer}) {
             setStudentRequests(data.val());
             setStudentRequestIds(Object.keys(data.val()));
         })
-        // onValue(studentRequestRef, (snapshot) => {
-        //     const data = snapshot.val();
-        //     return data;
-        //   });
         return(() => {
             closeSideDrawer();
         })
@@ -31,10 +27,12 @@ export default function StudentRequests({closeSideDrawer}) {
 
     
   return (
-    <View>
+    <View style={styles.container}>
+        <View style={styles.header}>
+        <Text style={styles.title}>Student Requests</Text>
+      </View>
         {(studentRequests && studentRequestIds.length >=0) ?
         studentRequestIds.map((id) => {
-            // console.log(studentRequests[id], id);
             const student = studentRequests[id];
             return(
                 <SingleStudentRequest key={id} id={id} student={student}/>
@@ -44,3 +42,20 @@ export default function StudentRequests({closeSideDrawer}) {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      paddingVertical: 0,
+      paddingHorizontal: 10
+    },
+    header: {
+      height: 50,
+      alignItems: 'center',
+      justifyContent: 'center',
+  },
+  title: {
+      fontSize: 20,
+      fontWeight: 'bold',
+  },
+  })

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import {getDatabase, ref, get} from 'firebase/database'
 import { app } from './firebaseConfig'
 import SingleNotice from './SingleNotice';
@@ -23,7 +23,6 @@ export default function ShowNotices({stuClass}) {
   }, [])
   return (
     <View>
-        <Text>Show Notices</Text>
         {(notices && noticeIds.length >= 0) ?
         noticeIds.map((id) => {
           console.log(notices[id])
@@ -35,3 +34,40 @@ export default function ShowNotices({stuClass}) {
     </View>
   )
 }
+
+
+const styles = StyleSheet.create({
+  detailContainer: {
+      padding: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginVertical: 5,
+      borderColor: 'light-grey',
+      shadowColor: 'black',
+      borderWidth: .5,
+      borderRadius: 10,
+      width: "100%"
+  },
+  buttons: {
+      width: "100%",
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center'
+  },
+  button: {
+      width: "40%",
+      marginTop: 5,
+      marginHorizontal: 10,
+      padding: 5,
+      height: 40,
+      backgroundColor: '#000',
+      color: '#fff',
+      borderRadius: 5,
+      alignItems: 'center',
+      justifyContent: 'center',
+      alignSelf: 'center'
+  },
+  btnText: {
+      color: 'white'
+  },
+});

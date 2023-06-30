@@ -1,17 +1,17 @@
 import React from 'react'
-import { Button, Text, View } from 'react-native'
+import { Button, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 
-import {app} from '../firebaseConfig'
-import {ref, getDatabase, set, remove} from 'firebase/database'
+import { app } from '../firebaseConfig'
+import { ref, getDatabase, set, remove } from 'firebase/database'
 
-export default function SingleStudentRequest({student, id}) {
+export default function SingleStudentRequest({ student, id }) {
     console.log(student)
     const database = getDatabase(app);
-    const studentRequestRef = ref(database, "studentRequests/"+id+"/");
+    const studentRequestRef = ref(database, "studentRequests/" + id + "/");
 
     const approveStudent = () => {
         const classPath = "class" + student.class + "/";
-        set(ref(database, classPath+id+"/"), {
+        set(ref(database, classPath + id + "/"), {
             name: student.name,
             contact: student.contactNumber,
             school: student.school,
@@ -26,13 +26,55 @@ export default function SingleStudentRequest({student, id}) {
         console.log("Hii");
         remove(studentRequestRef);
     }
-  return (
-    <View>
-        <Text>{student.name}</Text>
-        <Text>Mob: {student.contactNumber}</Text>
-        <Text>From {student.school}</Text>
-        <Button title="Approve" onPress={approveStudent}/>
-        <Button title="Decline" onPress={declineStudent}/>
-    </View>
-  )
+    return (
+        <View style={styles.detailContainer}>
+            <Text>{student.name}</Text>
+            <Text>Mob: {student.contactNumber}</Text>
+            <Text>From {student.school}</Text>
+            <View style={styles.buttons}>
+                <TouchableOpacity style={styles.button} onPress={approveStudent}>
+                    <Text style={styles.btnText}>Approve</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={declineStudent}>
+                    <Text style={styles.btnText}>Decline</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
 }
+
+const styles = StyleSheet.create({
+    detailContainer: {
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 5,
+        borderColor: 'light-grey',
+        shadowColor: 'black',
+        borderWidth: .5,
+        borderRadius: 10,
+        width: "100%"
+    },
+    buttons: {
+        width: "100%",
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    button: {
+        width: "40%",
+        marginTop: 5,
+        marginHorizontal: 10,
+        padding: 5,
+        height: 40,
+        backgroundColor: '#000',
+        color: '#fff',
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center'
+    },
+    btnText: {
+        color: 'white'
+    },
+});

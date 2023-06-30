@@ -21,6 +21,7 @@ export default function App() {
     <View style={styles.container}>
       <Routes>
         <Route path="/"  element={<StudentLogin />} />
+        {/* <Route path="/"  element={<Home />} /> */}
         <Route path="/login"  element={<StudentLogin />} />
         <Route path="/teacher-login" element={<Login />} />
         <Route path="/register" element={<Register />} />

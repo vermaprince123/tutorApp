@@ -1,6 +1,6 @@
 import { get, getDatabase, ref } from 'firebase/database'
 import React, { useEffect, useState } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { app } from '../firebaseConfig'
 import SingleEnrolledStudent from './SingleEnrolledStudent';
 
@@ -26,15 +26,29 @@ export default function StudentsOfSingleClass({ stuClass }) {
     }, [])
     return (
         <View>
-            <Text>{stuClass}</Text>
+
             {(enrolledStudents && enrolledStudentIds.length) ?
-            enrolledStudentIds.map((id) => {
-                console.log(enrolledStudents[id]);
-                return (
-                    <SingleEnrolledStudent key={id} id={id} student={enrolledStudents[id]} stuClass={stuClass}/>
-                )
-            })
-             : <Text>Fetching</Text>  }
+                <View style={styles.studentListContainer}>
+                    <Text style={styles.studentClassTitle}>Class {stuClass}</Text>
+                    {enrolledStudentIds.map((id) => {
+                        console.log(enrolledStudents[id]);
+                        return (
+                            <SingleEnrolledStudent key={id} id={id} student={enrolledStudents[id]} stuClass={stuClass} />
+                        )
+                    })}
+                </View>
+                : <Text>Fetching</Text>}
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    studentClassTitle: {
+        textAlign: 'center',
+        fontSize: 15,
+        fontWeight: '600'
+    },
+    studentListContainer: {
+        marginVertical: 10
+    }
+})

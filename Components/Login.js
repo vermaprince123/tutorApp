@@ -21,7 +21,7 @@ export default function Login() {
                 ...userCredentials?.user
             }
             ToastAndroid.show("Signed In as a Teacher", ToastAndroid.SHORT);
-            navigate('/home');
+            navigate('/home/enrolled-students');
         }).catch((error) => {
             console.log(error.code, "onLogin function")
             if (error.code == "auth/wrong-password") {
