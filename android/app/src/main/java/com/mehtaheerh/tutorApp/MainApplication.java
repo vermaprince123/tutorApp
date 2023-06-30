@@ -1,4 +1,4 @@
-package com.mehtaheerh.tutorApp;
+package com.ishantclasses.tutorapp;
 
 import android.app.Application;
 import android.content.res.Configuration;

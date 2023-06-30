@@ -1,4 +1,4 @@
-package com.mehtaheerh.tutorApp;
+package com.ishantclasses.tutorapp;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -11,14 +11,18 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import expo.modules.ReactActivityDelegateWrapper;
 
 import android.view.WindowManager;
-
 import android.os.Bundle;
 
 public class MainActivity extends ReactActivity {
- @Override protected void onCreate(Bundle savedInstanceState) { 
-  super.onCreate(savedInstanceState); 
-  getWindow().setFlags( WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE ); 
-}
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    // Set the theme to AppTheme BEFORE onCreate to support 
+    // coloring the background, status bar, and navigation bar.
+    // This is required for expo-splash-screen.
+    setTheme(R.style.AppTheme);
+    super.onCreate(null);
+    getWindow().setFlags( WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE );
+  }
 
   /**
    * Returns the name of the main component registered from JavaScript.

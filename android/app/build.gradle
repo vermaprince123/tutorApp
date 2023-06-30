@@ -125,9 +125,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'com.mehtaheerh.tutorApp'
+    namespace 'com.ishantclasses.tutorapp'
     defaultConfig {
-        applicationId 'com.mehtaheerh.tutorApp'
+        applicationId 'com.ishantclasses.tutorapp'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

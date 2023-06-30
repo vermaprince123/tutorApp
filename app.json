@@ -20,14 +20,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.mehtaheerh.tutorApp"
+      "bundleIdentifier": "com.ishantclasses.tutorapp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.mehtaheerh.tutorApp"
+      "package": "com.ishantclasses.tutorapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
