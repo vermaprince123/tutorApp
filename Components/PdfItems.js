@@ -1,37 +1,28 @@
 import { StyleSheet, Text, View, TouchableOpacity, Button, ToastAndroid, Dimensions, ActivityIndicator, FlatList } from 'react-native';
 import { useEffect, useState } from 'react';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { ERROR_MSG, UPLOAD_LINK } from './AppConstant';
 import { app } from './firebaseConfig';
 import { getStorage, ref, deleteObject } from "firebase/storage";
-import fetchFiles from './fetchFiles';
-import { Link } from "react-router-native";
-import UploadPdf from './UploadPdf';
-import { useLocation } from 'react-router-native';
+import { Link, useLocation } from "react-router-native";
 
+
+import { ERROR_MSG, UPLOAD_LINK } from './AppConstant';
+import fetchFiles from './fetchFiles';
+import UploadPdf from './UploadPdf';
 
 export default function PdfItems(props) {
-  console.log(props,"prps");
-  
-  console.log("/"+props.prefix+props.stuClass);
+  console.log(props, "prps");
 
-  const stuClass = (global.user.user == "student")  ? global.user.class : useLocation().search.slice(1);
+  console.log("/" + props.prefix + props.stuClass);
+
+  const stuClass = (global.user.user == "student") ? global.user.class : useLocation().search.slice(1);
 
   const [filePath, setFilePath] = useState("");
   const [fArray, setfArray] = useState(null);
   const isTeacherLoggedIn = (global.user.user === "teacher");
 
-  if(filePath !== "/"+props.prefix+stuClass){
-
-    setFilePath("/"+props.prefix+stuClass);
+  if (filePath !== "/" + props.prefix + stuClass) {
+    setFilePath("/" + props.prefix + stuClass);
     console.log(filePath, "ifff")
-  }
- 
-
-  const updateFiles = (file) => {
-    const arr = [...fArray, file];
-    console.log(arr);
-    setfArray(arr);
   }
 
   useEffect(() => {
@@ -40,6 +31,14 @@ export default function PdfItems(props) {
       setfArray(arr || []);
     })();
   }, [filePath]);
+
+  const updateFiles = (file) => {
+    const arr = [...fArray, file];
+    console.log(arr);
+    setfArray(arr);
+  }
+
+
 
   const handleDelete = (name) => {
     const storage = getStorage(app, UPLOAD_LINK);

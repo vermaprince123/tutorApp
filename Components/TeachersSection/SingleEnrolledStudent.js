@@ -1,24 +1,31 @@
 import { getDatabase, ref, remove } from 'firebase/database';
 import React from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import { app } from '../firebaseConfig';
 
-export default function SingleEnrolledStudent({id, student, stuClass}) {
-    const database = getDatabase(app);
-    const removeStudent = () => {
-        const studentRef = ref(database, "class" + stuClass + "/" + id);
-        console.log(studentRef)
-        console.log("Removing...");
-        remove(studentRef);
-    }
+import { ERROR_MSG } from '../AppConstant';
+
+export default function SingleEnrolledStudent({ id, student, stuClass, removeStudent }) {
+  const database = getDatabase(app);
+  const handleRemove = () => {
+    const studentRef = ref(database, "class" + stuClass + "/" + id);
+    console.log(studentRef)
+    console.log("Removing...");
+    remove(studentRef).then(() => {
+      removeStudent(id);
+    }).catch((e) => {
+      console.log(e.message);
+      ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
+    })
+  }
   return (
     <View style={styles.detailContainer}>
-        <Text>{student.name},</Text>
-        <Text>Mob: {student.contact}</Text>
-        <Text>Studies in {student.school}</Text>
-        <TouchableOpacity  onPress={removeStudent} style={styles.button}>
-          <Text style={styles.btnText}>Remove</Text>
-          </TouchableOpacity>
+      <Text>{student.name},</Text>
+      <Text>Mob: {student.contact}</Text>
+      <Text>Studies in {student.school}</Text>
+      <TouchableOpacity onPress={handleRemove} style={styles.button}>
+        <Text style={styles.btnText}>Remove</Text>
+      </TouchableOpacity>
     </View>
   )
 }

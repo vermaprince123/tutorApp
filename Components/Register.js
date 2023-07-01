@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { Button, Text, View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { getDatabase, ref, set, } from 'firebase/database'
+import { Button, Text, View, TextInput, TouchableOpacity, StyleSheet, ToastAndroid } from 'react-native';
+import { getDatabase, ref, set, get } from 'firebase/database'
 import { app } from './firebaseConfig';
 import { useNavigate } from 'react-router-native';
+import { EMPTY_INPUT_FIELDS, INVALID_CLASS, INVALID_DOB, REQUEST_SENT, CONTANT_NUMBER_EXISTS, ERROR_MSG} from './AppConstant';
 
 
 export default function Register() {
@@ -18,15 +19,60 @@ export default function Register() {
     const database = getDatabase(app);
 
     const uploadData = () => {
-        const id = contactNumber + stuName.split(" ")[0].toLowerCase();
-        set(ref(database, "studentRequests/" + id), {
-            name: stuName,
-            school: schoolName,
-            class: className,
-            dob: dob,
-            contactNumber: contactNumber,
-            password: password
-        })
+
+        //validate data
+        if (stuName == "" || schoolName == "" || className == "" || dob == "" || contactNumber == "" || password == "") {
+            ToastAndroid.show(EMPTY_INPUT_FIELDS, ToastAndroid.SHORT);
+            return;
+        }
+
+        //validate class only 12 and 11 are allowed
+        if (className != "11" && className != "12") {
+            ToastAndroid.show(INVALID_CLASS, ToastAndroid.SHORT);
+            return;
+        }
+
+
+        //validate dob only DD-MM-YYYY format is allowed
+        const dobRegex = /^\d{2}-\d{2}-\d{4}$/;
+        if (!dobRegex.test(dob)) {
+            ToastAndroid.show(INVALID_DOB, ToastAndroid.SHORT);
+            return;
+        }
+
+
+        //get the reference of the database and if contact number already exists then return
+        const studentRef = ref(database, "studentRequests/" + contactNumber);
+        get(studentRef).then((data) => {
+
+            if (data && data.val()) {
+                ToastAndroid.show(CONTANT_NUMBER_EXISTS, ToastAndroid.SHORT);
+                return;
+            }
+
+            set(ref(database, "studentRequests/" + contactNumber + "/class" + className), {
+                name: stuName,
+                school: schoolName,
+                class: className,
+                dob: dob,
+                contactNumber: contactNumber,
+                password: password
+            }).then(() => {
+                setStuName("");
+                setSchoolName("");
+                setClassName("");
+                setDob("");
+                setContactNumber("");
+                setPassword("");
+                ToastAndroid.show(REQUEST_SENT, ToastAndroid.SHORT);
+            }).catch((error) => {
+                ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
+            });
+
+        }).catch((error) => {
+            ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
+        }); 
+       
     }
 
     const goToStudentLogin = () => {
@@ -40,7 +86,9 @@ export default function Register() {
             </View>
             <View style={styles.form}>
                 <TextInput
+                    autoFocus={true}
                     style={styles.input}
+                    maxLength={30}
                     placeholder="Name"
                     value={stuName}
                     onChangeText={setStuName}
@@ -55,10 +103,14 @@ export default function Register() {
                     style={styles.input}
                     placeholder="Class"
                     value={className}
+                    maxLength={2}
+                    keyboardType="numeric"
                     onChangeText={setClassName}
                 />
                 <TextInput
                     style={styles.input}
+                    keyboardType="numeric"
+                    maxLength={10}
                     placeholder="Date of Birth (DD-MM-YYYY) Format"
                     value={dob}
                     onChangeText={setDob}
@@ -67,6 +119,8 @@ export default function Register() {
                     style={styles.input}
                     placeholder="Contact Number"
                     value={contactNumber}
+                    keyboardType="numeric"
+                    maxLength={10}
                     onChangeText={setContactNumber}
                 />
                 <TextInput

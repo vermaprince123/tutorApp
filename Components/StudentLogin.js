@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ToastAndroid } from 'react-native'
 import { ref, getDatabase, get } from 'firebase/database'
-
 import { app } from './firebaseConfig'
-import { Link, useNavigate } from 'react-router-native';
+import { useNavigate } from 'react-router-native';
+
+import { EMPTY_INPUT_FIELDS, INVALID_PASSWORD, CONTANT_NUMBER_DOES_NOT_EXISTS, INVALID_CLASS, INVALID_CONTACT_NUMBER, ERROR_MSG, CLASS_NOT_FOUND} from './AppConstant';
 
 
 export default function StudentLogin() {
-    const [username, setUsername] = useState("");
+    const [contactNumber, setContactNumber] = useState("");
     const [password, setPassword] = useState("");
     const [stuClass, setStuClass] = useState("");
 
@@ -16,30 +17,57 @@ export default function StudentLogin() {
     const database = getDatabase(app);
 
     const handleLogin = () => {
-        const studentPath = "class" + stuClass + "/" + username + "/";
+
+        //validate data
+        if (contactNumber == "" || password == "" || stuClass == "") {
+            ToastAndroid.show(EMPTY_INPUT_FIELDS, ToastAndroid.SHORT);
+            return;
+        }
+
+
+        //number validation length should be 10
+        if (contactNumber.length != 10) {
+            ToastAndroid.show(INVALID_CONTACT_NUMBER, ToastAndroid.SHORT);
+            return;
+        }
+
+        //validate class only 12 and 11 are allowed
+        if (stuClass != "11" && stuClass != "12") {
+            ToastAndroid.show(INVALID_CLASS, ToastAndroid.SHORT);
+            return;
+        }
+
+
+        const studentPath = "studentRequests/" + contactNumber;
         console.log(studentPath);
         const studentRef = ref(database, studentPath);
-        console.log(studentRef);
+        console.log(studentRef,"stu");
 
         get(studentRef).then((data) => {
             if (data && data.val()) {
-                if (data.val().password == password) {
-                    console.log("Logged In");
-                    global.user = {
-                        user: "student",
-                        class: stuClass,
-                        ...data.val()
-                    }
-                    navigate('/home/?' + stuClass);
-                }
-                else {
-                    console.log("Invalid Password");
+                const getAvailableClass = data.val()[`class${stuClass}`];
+                if(getAvailableClass && getAvailableClass.class == stuClass){
+                        if (getAvailableClass.password == password) {
+                            global.user = {
+                                user: "student",
+                                class: stuClass,
+                                ...data.val()
+                            }
+                            navigate('/home/?' + stuClass);
+                        }
+                        else {
+                            ToastAndroid.show(INVALID_PASSWORD, ToastAndroid.SHORT);
+                        }
+                }else{
+                    ToastAndroid.show(CLASS_NOT_FOUND, ToastAndroid.SHORT);
                 }
             }
             else {
-                console.log("Invalid Username or class");
+                ToastAndroid.show(CONTANT_NUMBER_DOES_NOT_EXISTS, ToastAndroid.SHORT);
             }
-        })
+        }).catch(() => {
+            ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
+        });
 
     }
 
@@ -56,15 +84,19 @@ export default function StudentLogin() {
                 <Text style={styles.title}>Login As Student</Text>
             </View>
             <View style={styles.form}>
-                <TextInput
+                <TextInput 
+                    placeholder="Contact Number"
+                    value={contactNumber}
+                    keyboardType="numeric"
+                    maxLength={10}
+                    onChangeText={setContactNumber}
                     style={styles.input}
-                    placeholder="Username"
-                    value={username}
-                    onChangeText={setUsername}
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="class"
+                    maxLength={2}
+                    keyboardType="numeric"
                     value={stuClass}
                     onChangeText={setStuClass}
                 />

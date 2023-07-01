@@ -24,6 +24,18 @@ export default function StudentsOfSingleClass({ stuClass }) {
             }
         })
     }, [])
+
+    const removeStudent = (id) => {
+        var newEnrolledStudents = enrolledStudents;
+        var newEnrolledStudentIds = enrolledStudentIds;
+
+        newEnrolledStudentIds = newEnrolledStudentIds.filter((newId) => newId != id);
+        delete(newEnrolledStudents[id]);
+
+        setEnrolledStudentIds(newEnrolledStudentIds);
+        setEnrolledStudents(newEnrolledStudents);
+    }
+
     return (
         <View>
 
@@ -33,7 +45,7 @@ export default function StudentsOfSingleClass({ stuClass }) {
                     {enrolledStudentIds.map((id) => {
                         console.log(enrolledStudents[id]);
                         return (
-                            <SingleEnrolledStudent key={id} id={id} student={enrolledStudents[id]} stuClass={stuClass} />
+                            <SingleEnrolledStudent key={id} id={id} student={enrolledStudents[id]} stuClass={stuClass} removeStudent={removeStudent} />
                         )
                     })}
                 </View>
