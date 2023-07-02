@@ -1,8 +1,9 @@
 import React from 'react'
-import { Button, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { Button, Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 
 import { app } from '../firebaseConfig'
 import { ref, getDatabase, set, remove } from 'firebase/database'
+
 
 export default function SingleStudentRequest({ student, id, removeRequestFromList }) {
     console.log(student)
@@ -25,11 +26,15 @@ export default function SingleStudentRequest({ student, id, removeRequestFromLis
     }
 
     const declineStudent = () => {
-        remove(studentRequestRef);
+        remove(studentRequestRef).then(() => {
+
+            console.log(studentRequestRef)
+        })
         removeRequestFromList(student.contact, student.class);
     }
     return (
         <View style={styles.detailContainer}>
+            
             <Text>{student.name}</Text>
             <Text>Mob: {student.contact}</Text>
             <Text>From {student.school}</Text>

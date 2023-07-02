@@ -7,6 +7,8 @@ import BottomNavigator from './BottomNavigator';
 
 export default function MainContent({closeSideDrawer}) {
   const stuClass = (global.user.user === "teacher") ? useLocation().search.slice(1) : "";
+
+  console.log(useLocation());
   
   useEffect(() => {
     return(() => {

@@ -1,9 +1,8 @@
 import React from 'react'
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity, ToastAndroid, Image } from 'react-native'
-import { Link, useNavigate, useLocation } from 'react-router-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native'
+import { Link, useLocation } from 'react-router-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
-import { ERROR_MSG } from './AppConstant';
 import { useRef } from 'react';
 
 
@@ -59,13 +58,13 @@ export default function SideDrawer({ closeSideDrawer, handleSignOut }) {
                         Student Requests
                     </Text>
                 </Link>
-                <Link to="/home/main-content?11" component={TouchableOpacity}
+                <Link to="/home/?11" component={TouchableOpacity}
                     style={activeScreen.current == "class11" ? styles.activeNavLink : styles.navLink}>
                     <Text style={activeScreen.current == "class11" ? styles.activeNavLinkText : styles.navLinkText}>
                         Class 11
                     </Text>
                 </Link>
-                <Link to="/home/main-content?12" component={TouchableOpacity}
+                <Link to="/home/?12" component={TouchableOpacity}
                     style={activeScreen.current == "class12" ? styles.activeNavLink : styles.navLink}>
                     <Text style={activeScreen.current == "class12" ? styles.activeNavLinkText : styles.navLinkText}>
                         Class 12

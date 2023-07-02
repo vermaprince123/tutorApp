@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ActivityIndicator, ScrollView, FlatList } from 'react-native';
 import { getDatabase, ref, get } from 'firebase/database'
 import { app } from './firebaseConfig'
 import SingleNotice from './SingleNotice';
@@ -54,6 +54,7 @@ export default function ShowNotices({ stuClass }) {
   }
   return (
     <View style={styles.container}>
+      <ScrollView style={styles.noticeListContainer}>
       {(notices && noticeIds.length >= 0) ?
         noticeIds.map((id) => {
           console.log(notices[id])
@@ -61,7 +62,8 @@ export default function ShowNotices({ stuClass }) {
             <SingleNotice key={id} id={id} notice={notices[id]} stuClass={stuClass} deleteNotice={deleteNotice} />
           )
         })
-        :  <Text>Fetching</Text>}
+        :  <ActivityIndicator size="large" color="black" style={styles.loader} />}
+        </ScrollView>
       {isTeacherLoggedIn && <TouchableOpacity style={styles.buttonContainer} onPress={addNotice}><Text style={styles.uploadButton}>+</Text></TouchableOpacity>}
     </View>
   )
@@ -71,7 +73,8 @@ export default function ShowNotices({ stuClass }) {
 const styles = StyleSheet.create({
 
   container: {
-    flex: 1
+    flex: 1,
+    
   },
   buttons: {
     width: "100%",
@@ -99,8 +102,9 @@ const styles = StyleSheet.create({
     paddingLeft: 7,
     paddingRight: 5,
     position: 'absolute',
-    bottom: Dimensions.get('window').height * 0.02,
+    bottom: Dimensions.get('window').height * 0.03,
     right: 1,
+  
   },
   uploadButton: {
     color: "white",
@@ -111,4 +115,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
 
   },
+  loader: {
+    alignSelf: 'center'
+  },
+  noticeListContainer: {
+    height: "100%"
+  }
 });

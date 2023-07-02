@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import StudentsOfSingleClass from './StudentsOfSingleClass'
 
 export default function EnrolledStudents({ closeSideDrawer }) {
@@ -13,8 +13,10 @@ export default function EnrolledStudents({ closeSideDrawer }) {
       <View style={styles.header}>
         <Text style={styles.title}>Enrolled Students</Text>
       </View>
-      <StudentsOfSingleClass stuClass={11} />
-      <StudentsOfSingleClass stuClass={12} />
+      <ScrollView style={styles.studentListContainer}>
+        <StudentsOfSingleClass stuClass={11} />
+        <StudentsOfSingleClass stuClass={12} />
+      </ScrollView>
     </View>
   )
 }
@@ -35,4 +37,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
+  studentListContainer: {
+    // borderWidth: 1
+  }
 })

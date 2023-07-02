@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet, KeyboardAvoidingView } from 'react-native'
+import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ToastAndroid } from 'react-native'
 import { getDatabase, ref, set } from 'firebase/database';
 
 import { app } from './firebaseConfig';
 import { useLocation, useNavigate } from 'react-router-native';
+
+import { EMPTY_INPUT_FIELDS } from './AppConstant';
 
 
 export default function UpdateNotice() {
@@ -19,22 +21,18 @@ export default function UpdateNotice() {
   const [stuClass, setStuClass] = useState(arr[4]);
   const [stuId, setstuId] = useState(arr[1]);
 
-  // useEffect(() => {
-  //   if (arr.length == 5) {
-  //     stuId = arr[1];
-  //     setTitle(arr[2]);
-  //     setDescription(arr[3]);
-  //     stuClass = arr[4];
-  //   }
-  // }, []);
+
 
   const database = getDatabase(app);
 
   const handleSubmit = () => {
     const id = stuId != "" ? stuId : Date.now();
     const noticeRef = ref(database, "/notices/" +"class" + stuClass + "/" + id);
-    console.log(noticeRef);
-    console.log(title, "dwewe");
+    
+    if(!areValidInputs()){
+      ToastAndroid.show(EMPTY_INPUT_FIELDS, ToastAndroid.SHORT);
+      return;
+    }
     set(noticeRef, {
       title: title,
       description: description
@@ -45,6 +43,15 @@ export default function UpdateNotice() {
   const handleCancel = () => {
     navigate(-1);
   }
+
+  const areValidInputs = () => {
+    if(title && description){
+      return true;
+    }
+    return false;
+  }
+
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>

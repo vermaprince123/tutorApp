@@ -9,7 +9,7 @@ import { EMPTY_INPUT_FIELDS, INVALID_CLASS, INVALID_DOB, REQUEST_SENT, CONTANT_N
 export default function Register() {
     const [stuName, setStuName] = useState("");
     const [schoolName, setSchoolName] = useState("");
-    const [className, setClassName] = useState("");
+    const [stuClass, setstuClass] = useState("");
     const [dob, setDob] = useState("");
     const [contactNumber, setContactNumber] = useState("");
     const [password, setPassword] = useState("");
@@ -21,13 +21,13 @@ export default function Register() {
     const uploadData = () => {
 
         //validate data
-        if (stuName == "" || schoolName == "" || className == "" || dob == "" || contactNumber == "" || password == "") {
+        if (stuName == "" || schoolName == "" || stuClass == "" || dob == "" || contactNumber == "" || password == "") {
             ToastAndroid.show(EMPTY_INPUT_FIELDS, ToastAndroid.SHORT);
             return;
         }
 
         //validate class only 12 and 11 are allowed
-        if (className != "11" && className != "12") {
+        if (stuClass != "11" && stuClass != "12") {
             ToastAndroid.show(INVALID_CLASS, ToastAndroid.SHORT);
             return;
         }
@@ -50,17 +50,17 @@ export default function Register() {
                 return;
             }
 
-            set(ref(database, "studentRequests/" + contactNumber + "/class" + className), {
+            set(ref(database, "studentRequests/" + contactNumber + "/class" + stuClass), {
                 name: stuName,
                 school: schoolName,
-                class: className,
+                class: stuClass,
                 dob: dob,
-                contactNumber: contactNumber,
+                contact: contactNumber,
                 password: password
             }).then(() => {
                 setStuName("");
                 setSchoolName("");
-                setClassName("");
+                setstuClass("");
                 setDob("");
                 setContactNumber("");
                 setPassword("");
@@ -102,10 +102,10 @@ export default function Register() {
                 <TextInput
                     style={styles.input}
                     placeholder="Class"
-                    value={className}
+                    value={stuClass}
                     maxLength={2}
                     keyboardType="numeric"
-                    onChangeText={setClassName}
+                    onChangeText={setstuClass}
                 />
                 <TextInput
                     style={styles.input}

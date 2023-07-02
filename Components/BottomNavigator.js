@@ -10,6 +10,8 @@ export default function BottomNavigator({ stuClass }) {
     const location = useLocation();
     const path = location.pathname.replace("/home", "");
 
+    console.log(path, "PATH")
+
 
     if (path == "/" || path == "/class") {
         activeScreen.current = "home"

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ToastAndroid } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ToastAndroid, Dimensions, Image } from 'react-native'
 import { ref, getDatabase, get } from 'firebase/database'
 import { app } from './firebaseConfig'
 import { useNavigate } from 'react-router-native';
 
-import { EMPTY_INPUT_FIELDS, INVALID_PASSWORD, CONTANT_NUMBER_DOES_NOT_EXISTS, INVALID_CLASS, INVALID_CONTACT_NUMBER, ERROR_MSG, CLASS_NOT_FOUND} from './AppConstant';
+import { EMPTY_INPUT_FIELDS, INVALID_PASSWORD, CONTANT_NUMBER_DOES_NOT_EXISTS, INVALID_CLASS, INVALID_CONTACT_NUMBER, ERROR_MSG, CLASS_NOT_FOUND } from './AppConstant';
 
 
 export default function StudentLogin() {
@@ -18,20 +18,17 @@ export default function StudentLogin() {
 
     const handleLogin = () => {
 
-        //validate data
         if (contactNumber == "" || password == "" || stuClass == "") {
             ToastAndroid.show(EMPTY_INPUT_FIELDS, ToastAndroid.SHORT);
             return;
         }
 
 
-        //number validation length should be 10
         if (contactNumber.length != 10) {
             ToastAndroid.show(INVALID_CONTACT_NUMBER, ToastAndroid.SHORT);
             return;
         }
 
-        //validate class only 12 and 11 are allowed
         if (stuClass != "11" && stuClass != "12") {
             ToastAndroid.show(INVALID_CLASS, ToastAndroid.SHORT);
             return;
@@ -41,24 +38,24 @@ export default function StudentLogin() {
         const studentPath = "studentRequests/" + contactNumber;
         console.log(studentPath);
         const studentRef = ref(database, studentPath);
-        console.log(studentRef,"stu");
+        console.log(studentRef, "stu");
 
         get(studentRef).then((data) => {
             if (data && data.val()) {
                 const getAvailableClass = data.val()[`class${stuClass}`];
-                if(getAvailableClass && getAvailableClass.class == stuClass){
-                        if (getAvailableClass.password == password) {
-                            global.user = {
-                                user: "student",
-                                class: stuClass,
-                                ...data.val()
-                            }
-                            navigate('/home/?' + stuClass);
+                if (getAvailableClass && getAvailableClass.class == stuClass) {
+                    if (getAvailableClass.password == password) {
+                        global.user = {
+                            user: "student",
+                            class: stuClass,
+                            ...data.val()
                         }
-                        else {
-                            ToastAndroid.show(INVALID_PASSWORD, ToastAndroid.SHORT);
-                        }
-                }else{
+                        navigate('/home/?' + stuClass);
+                    }
+                    else {
+                        ToastAndroid.show(INVALID_PASSWORD, ToastAndroid.SHORT);
+                    }
+                } else {
                     ToastAndroid.show(CLASS_NOT_FOUND, ToastAndroid.SHORT);
                 }
             }
@@ -80,11 +77,15 @@ export default function StudentLogin() {
     }
     return (
         <View>
+            <Image source={require('../assets/appLogo.png')} style={styles.logo} />
+            <View style={styles.iccName}>
+                <Text style={styles.nameTitle}>Ishant Commerce Classes</Text>
+            </View>
             <View style={styles.header}>
                 <Text style={styles.title}>Login As Student</Text>
             </View>
             <View style={styles.form}>
-                <TextInput 
+                <TextInput
                     placeholder="Contact Number"
                     value={contactNumber}
                     keyboardType="numeric"
@@ -94,7 +95,7 @@ export default function StudentLogin() {
                 />
                 <TextInput
                     style={styles.input}
-                    placeholder="class"
+                    placeholder="Class"
                     maxLength={2}
                     keyboardType="numeric"
                     value={stuClass}
@@ -126,6 +127,22 @@ export default function StudentLogin() {
 }
 
 const styles = StyleSheet.create({
+    logo: {
+        width: Dimensions.get('window').width * 0.5,
+        height: Dimensions.get('window').width * 0.5,
+        resizeMode: 'contain',
+        alignSelf: 'center'
+    },
+    iccName: {
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    nameTitle: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: '#3B3B3B'
+    },
     header: {
         height: 50,
         alignItems: 'center',
@@ -166,7 +183,7 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     otherLinks: {
-        marginTop: 20,
+        marginTop: 15,
         display: 'flex',
         justifyContent: 'center',
         gap: 15
