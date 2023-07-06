@@ -31,8 +31,8 @@ export default function UploadPdf(props) {
   }
 
   async function uploadFileAsync(doc) {
-    if (doc.size > 2 * 1024 * 1024) {
-      ToastAndroid.show("File Size should be less than 2 MB", ToastAndroid.SHORT);
+    if (doc.size > 10 * 1024 * 1024) {
+      ToastAndroid.show("File Size should be less than 10 MB", ToastAndroid.SHORT);
       return;
     }
 
