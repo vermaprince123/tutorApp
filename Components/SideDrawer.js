@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native'
 import { Link, useLocation } from 'react-router-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
-import { useRef } from 'react';
 
 
 export default function SideDrawer({ closeSideDrawer, handleSignOut }) {
@@ -14,7 +13,6 @@ export default function SideDrawer({ closeSideDrawer, handleSignOut }) {
 
 
 
-    const isTeacherLoggedIn = (global.user.user == "teacher");
 
     const activeScreen = useRef("enrolled-students");
 
@@ -121,7 +119,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         gap: 20
-        // alignSelf: 'center'
     },
     activeNavLink: {
         width: "90%",

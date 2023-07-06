@@ -16,7 +16,7 @@ export const CONTANT_NUMBER_EXISTS = "Contact number already exists";
 
 export const INVALID_PASSWORD = "Invalid Password";
 
-export const CONTANT_NUMBER_DOES_NOT_EXISTS = "Contact number does not exists";
+export const CONTANT_NUMBER_DOES_NOT_EXISTS = "Contact number does not exist for that class";
 
 export const INVALID_CONTACT_NUMBER = "Invalid Contact Number";
 

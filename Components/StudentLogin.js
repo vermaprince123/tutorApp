@@ -8,7 +8,7 @@ import { EMPTY_INPUT_FIELDS, INVALID_PASSWORD, CONTANT_NUMBER_DOES_NOT_EXISTS, I
 
 
 export default function StudentLogin() {
-    const [contactNumber, setContactNumber] = useState("");
+    const [contact, setContact] = useState("");
     const [password, setPassword] = useState("");
     const [stuClass, setStuClass] = useState("");
 
@@ -18,13 +18,13 @@ export default function StudentLogin() {
 
     const handleLogin = () => {
 
-        if (contactNumber == "" || password == "" || stuClass == "") {
+        if (contact == "" || password == "" || stuClass == "") {
             ToastAndroid.show(EMPTY_INPUT_FIELDS, ToastAndroid.SHORT);
             return;
         }
 
 
-        if (contactNumber.length != 10) {
+        if (contact.length != 10) {
             ToastAndroid.show(INVALID_CONTACT_NUMBER, ToastAndroid.SHORT);
             return;
         }
@@ -35,16 +35,16 @@ export default function StudentLogin() {
         }
 
 
-        const studentPath = "studentRequests/" + contactNumber;
+        const studentPath = "/class" + stuClass;
         console.log(studentPath);
         const studentRef = ref(database, studentPath);
         console.log(studentRef, "stu");
 
         get(studentRef).then((data) => {
             if (data && data.val()) {
-                const getAvailableClass = data.val()[`class${stuClass}`];
-                if (getAvailableClass && getAvailableClass.class == stuClass) {
-                    if (getAvailableClass.password == password) {
+                const getAvailableContact = data.val()[contact];
+                if (getAvailableContact) {
+                    if (getAvailableContact.password == password) {
                         global.user = {
                             user: "student",
                             class: stuClass,
@@ -56,15 +56,45 @@ export default function StudentLogin() {
                         ToastAndroid.show(INVALID_PASSWORD, ToastAndroid.SHORT);
                     }
                 } else {
-                    ToastAndroid.show(CLASS_NOT_FOUND, ToastAndroid.SHORT);
+                    ToastAndroid.show(CONTANT_NUMBER_DOES_NOT_EXISTS, ToastAndroid.SHORT);
                 }
             }
             else {
-                ToastAndroid.show(CONTANT_NUMBER_DOES_NOT_EXISTS, ToastAndroid.SHORT);
+                ToastAndroid.show(CLASS_NOT_FOUND, ToastAndroid.SHORT);
             }
         }).catch(() => {
             ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
         });
+        // const studentPath = "studentRequests/" + contact;
+        // console.log(studentPath);
+        // const studentRef = ref(database, studentPath);
+        // console.log(studentRef, "stu");
+
+        // get(studentRef).then((data) => {
+        //     if (data && data.val()) {
+        //         const getAvailableClass = data.val()[`class${stuClass}`];
+        //         if (getAvailableClass && getAvailableClass.class == stuClass) {
+        //             if (getAvailableClass.password == password) {
+        //                 global.user = {
+        //                     user: "student",
+        //                     class: stuClass,
+        //                     ...data.val()
+        //                 }
+        //                 navigate('/home/?' + stuClass);
+        //             }
+        //             else {
+        //                 ToastAndroid.show(INVALID_PASSWORD, ToastAndroid.SHORT);
+        //             }
+        //         } else {
+        //             ToastAndroid.show(CLASS_NOT_FOUND, ToastAndroid.SHORT);
+        //         }
+        //     }
+        //     else {
+        //         ToastAndroid.show(CONTANT_NUMBER_DOES_NOT_EXISTS, ToastAndroid.SHORT);
+        //     }
+        // }).catch(() => {
+        //     ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
+        // });
 
     }
 
@@ -87,10 +117,10 @@ export default function StudentLogin() {
             <View style={styles.form}>
                 <TextInput
                     placeholder="Contact Number"
-                    value={contactNumber}
+                    value={contact}
                     keyboardType="numeric"
                     maxLength={10}
-                    onChangeText={setContactNumber}
+                    onChangeText={setContact}
                     style={styles.input}
                 />
                 <TextInput
@@ -106,6 +136,7 @@ export default function StudentLogin() {
                     placeholder="Password"
                     value={password}
                     onChangeText={setPassword}
+                    secureTextEntry={true}
                 />
                 <TouchableOpacity onPress={handleLogin} style={styles.button}>
                     <Text style={styles.buttonText}>Click here to Login</Text>
