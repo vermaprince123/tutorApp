@@ -1,6 +1,6 @@
 import { get, getDatabase, ref } from 'firebase/database'
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
 import { app } from '../firebaseConfig'
 import SingleEnrolledStudent from './SingleEnrolledStudent';
 
@@ -30,7 +30,7 @@ export default function StudentsOfSingleClass({ stuClass }) {
         var newEnrolledStudentIds = enrolledStudentIds;
 
         newEnrolledStudentIds = newEnrolledStudentIds.filter((newId) => newId != id);
-        delete(newEnrolledStudents[id]);
+        delete (newEnrolledStudents[id]);
 
         setEnrolledStudentIds(newEnrolledStudentIds);
         setEnrolledStudents(newEnrolledStudents);
@@ -39,17 +39,18 @@ export default function StudentsOfSingleClass({ stuClass }) {
     return (
         <View>
 
-            {(enrolledStudents && enrolledStudentIds.length) ?
+            {(enrolledStudents && enrolledStudentIds.length > 0) ?
                 <View style={styles.studentListContainer}>
                     <Text style={styles.studentClassTitle}>Class {stuClass}</Text>
                     {enrolledStudentIds.map((id) => {
                         console.log(enrolledStudents[id]);
+                        console.log(id)
                         return (
                             <SingleEnrolledStudent key={id} id={id} student={enrolledStudents[id]} stuClass={stuClass} removeStudent={removeStudent} />
                         )
                     })}
                 </View>
-                : <Text>Fetching</Text>}
+                : (enrolledStudentIds.length == 0) ? <Text>No students enrolled for class {stuClass}</Text> : <ActivityIndicator size="large" color="black" style={styles.loader} />}
         </View>
     )
 }
@@ -62,5 +63,8 @@ const styles = StyleSheet.create({
     },
     studentListContainer: {
         marginVertical: 10
-    }
+    },
+    loader: {
+        alignSelf: 'center'
+    },
 })
