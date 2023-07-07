@@ -42,7 +42,7 @@ export default function PdfItems(props) {
 
   const handleDelete = (name) => {
     const storage = getStorage(app, UPLOAD_LINK);
-    const desertRef = ref(storage, name);
+    const desertRef = ref(storage, "/" + props.prefix + "/" + name);
     const arr = fArray.filter((file) => (file.name != name));
     setfArray(arr || []);
     deleteObject(desertRef).then(() => {
