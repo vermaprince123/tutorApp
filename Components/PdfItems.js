@@ -12,16 +12,16 @@ import UploadPdf from './UploadPdf';
 export default function PdfItems(props) {
   console.log(props, "prps");
 
-  console.log("/" + props.prefix + props.stuClass);
+  // console.log("/" + props.prefix + props.stuClass);
 
-  const stuClass = (global.user.user == "student") ? global.user.class : useLocation().search.slice(1);
-
+  // const stuClass = (global.user.user == "student") ? global.user.class : useLocation().search.slice(1);
+  console.log(props.filePath, "FILEPATH");
   const [filePath, setFilePath] = useState("");
   const [fArray, setfArray] = useState(null);
   const isTeacherLoggedIn = (global.user.user === "teacher");
 
-  if (filePath !== "/" + props.prefix + stuClass) {
-    setFilePath("/" + props.prefix + stuClass);
+  if (filePath !== props.filePath) {
+    setFilePath(props.filePath);
     console.log(filePath, "ifff")
   }
 

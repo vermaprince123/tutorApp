@@ -21,7 +21,7 @@ export default function SingleNotice({ notice, id, stuClass, deleteNotice }) {
 
   const handleEdit = () => {
     const searchParam = "?" + id + "?" + notice.title + "?" + notice.description + "?" + stuClass;
-    navigate("/home/notices/add-edit-notice" + searchParam);
+    navigate("/home/class"+stuClass+"-content/" + "notices/add-edit-notice" + searchParam);
 
   }
   return (

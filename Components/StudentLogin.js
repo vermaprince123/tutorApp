@@ -50,7 +50,7 @@ export default function StudentLogin() {
                             class: stuClass,
                             ...data.val()
                         }
-                        navigate('/home/?' + stuClass);
+                        navigate('/home/class' + stuClass + "-content");
                     }
                     else {
                         ToastAndroid.show(INVALID_PASSWORD, ToastAndroid.SHORT);
@@ -65,37 +65,6 @@ export default function StudentLogin() {
         }).catch(() => {
             ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
         });
-        // const studentPath = "studentRequests/" + contact;
-        // console.log(studentPath);
-        // const studentRef = ref(database, studentPath);
-        // console.log(studentRef, "stu");
-
-        // get(studentRef).then((data) => {
-        //     if (data && data.val()) {
-        //         const getAvailableClass = data.val()[`class${stuClass}`];
-        //         if (getAvailableClass && getAvailableClass.class == stuClass) {
-        //             if (getAvailableClass.password == password) {
-        //                 global.user = {
-        //                     user: "student",
-        //                     class: stuClass,
-        //                     ...data.val()
-        //                 }
-        //                 navigate('/home/?' + stuClass);
-        //             }
-        //             else {
-        //                 ToastAndroid.show(INVALID_PASSWORD, ToastAndroid.SHORT);
-        //             }
-        //         } else {
-        //             ToastAndroid.show(CLASS_NOT_FOUND, ToastAndroid.SHORT);
-        //         }
-        //     }
-        //     else {
-        //         ToastAndroid.show(CONTANT_NUMBER_DOES_NOT_EXISTS, ToastAndroid.SHORT);
-        //     }
-        // }).catch(() => {
-        //     ToastAndroid.show(ERROR_MSG, ToastAndroid.SHORT);
-        // });
-
     }
 
     const goToRegister = () => {

@@ -9,6 +9,8 @@ import StudentRequests from './TeachersSection/StudentRequests';
 import EnrolledStudents from './TeachersSection/EnrolledStudents';
 import PdfItems from './PdfItems';
 import MainContent from './MainContent';
+import Class11Content from './Class11Content';
+import Class12Content from './Class12Content';
 
 
 export default function Home() {
@@ -72,7 +74,9 @@ export default function Home() {
         <Routes>
           <Route path="/student-requests" element={<StudentRequests closeSideDrawer={closeSideDrawer} />} />
           <Route path="/enrolled-students" element={<EnrolledStudents closeSideDrawer={closeSideDrawer} />} />
-          <Route path="/*" element={<MainContent closeSideDrawer={closeSideDrawer} />} />
+          <Route path="/class11-content/*" element={<Class11Content closeSideDrawer={closeSideDrawer} />} />
+          <Route path="/class12-content/*" element={<Class12Content closeSideDrawer={closeSideDrawer} />} />
+          {/* <Route path="/*" element={<MainContent closeSideDrawer={closeSideDrawer} />} /> */}
         </Routes>
       </View>
       <View style={[styles.drawerContainer, { display: drawerVisibility }]}>
@@ -120,7 +124,7 @@ const styles = StyleSheet.create({
   },
   logOutButton: {
     color: 'white',
-   
+
   },
   logOutButtonContainer: {
     position: 'absolute',

@@ -8,12 +8,12 @@ export default function BottomNavigator({ stuClass }) {
 
     const activeScreen = useRef("home");
     const location = useLocation();
-    const path = location.pathname.replace("/home", "");
+    const path = location.pathname.replace("/home/class"+stuClass+"-content", "");
 
     console.log(path, "PATH")
 
 
-    if (path == "/" || path == "/class") {
+    if (path == "/" || path == "") {
         activeScreen.current = "home"
     }
     else if (path == "/assignments") {
@@ -42,7 +42,7 @@ export default function BottomNavigator({ stuClass }) {
     }, [])
     return (
         <View style={styles.bottomTab}>
-            <Link to={"/home/?" + stuClass} component={TouchableOpacity}
+            <Link to={"/home/class"+stuClass+"-content/"} component={TouchableOpacity}
                 style={activeScreen.current == "home" ? styles.activeNavLink : styles.bottomLinks}>
                 <>
                     <Icon name="notebook-multiple" size={iconSize} 
@@ -53,7 +53,7 @@ export default function BottomNavigator({ stuClass }) {
                     </Text>
                 </>
             </Link>
-            <Link to={"/home/assignments?" + stuClass} component={TouchableOpacity}
+            <Link to={"/home/class"+stuClass+"-content/assignments"} component={TouchableOpacity}
                 style={activeScreen.current == "assignments" ? styles.activeNavLink : styles.bottomLinks}>
                 <>
                     <Icon name="note-multiple" size={iconSize} 
@@ -64,7 +64,7 @@ export default function BottomNavigator({ stuClass }) {
                     </Text>
                 </>
             </Link>
-            <Link to={"/home/tests?" + stuClass} component={TouchableOpacity}
+            <Link to={"/home/class"+stuClass+"-content/tests"} component={TouchableOpacity}
                 style={activeScreen.current == "tests" ? styles.activeNavLink : styles.bottomLinks}>
                 <>
                     <Icon name="clipboard-edit" size={iconSize} 
@@ -75,7 +75,7 @@ export default function BottomNavigator({ stuClass }) {
                     </Text>
                 </>
             </Link>
-            <Link to={"/home/notices?" + stuClass} component={TouchableOpacity}
+            <Link to={"/home/class"+stuClass+"-content/notices"} component={TouchableOpacity}
                 style={activeScreen.current == "notices" ? styles.activeNavLink : styles.bottomLinks}>
                 <>
                     <Icon name="bell-alert" size={iconSize} 

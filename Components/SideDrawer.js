@@ -8,27 +8,31 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 export default function SideDrawer({ closeSideDrawer, handleSignOut }) {
     const location = useLocation();
     console.log(location, "LOCATION");
-    const path = location.pathname.replace("/home", "");
-    const search = location.search.replace("?", "");
+    const path = location.pathname.replace("/home/", "");
+    console.log(path)
 
 
 
 
     const activeScreen = useRef("enrolled-students");
 
-    if (path == "/enrolled-students") {
+    if (path == "enrolled-students") {
         activeScreen.current = "enrolled-students"
     }
-    else if (path == "/student-requests") {
+    else if (path == "student-requests") {
         activeScreen.current = "student-requests"
     }
-    else {
-        if (search == "11") {
-            activeScreen.current = "class11"
+    else{
+        let class11Pattern = /class11-content.*/
+        let class12Pattern = /class12-content.*/
+
+        if(class11Pattern.test(path)){
+            activeScreen.current = "class11-content"
         }
-        else {
-            activeScreen.current = "class12"
+        else if(class12Pattern.test(path)){
+            activeScreen.current = "class12-content"
         }
+        
     }
 
 
@@ -56,15 +60,15 @@ export default function SideDrawer({ closeSideDrawer, handleSignOut }) {
                         Student Requests
                     </Text>
                 </Link>
-                <Link to="/home/?11" component={TouchableOpacity}
-                    style={activeScreen.current == "class11" ? styles.activeNavLink : styles.navLink}>
-                    <Text style={activeScreen.current == "class11" ? styles.activeNavLinkText : styles.navLinkText}>
+                <Link to="/home/class11-content" component={TouchableOpacity}
+                    style={activeScreen.current == "class11-content" ? styles.activeNavLink : styles.navLink}>
+                    <Text style={activeScreen.current == "class11-content" ? styles.activeNavLinkText : styles.navLinkText}>
                         Class 11
                     </Text>
                 </Link>
-                <Link to="/home/?12" component={TouchableOpacity}
-                    style={activeScreen.current == "class12" ? styles.activeNavLink : styles.navLink}>
-                    <Text style={activeScreen.current == "class12" ? styles.activeNavLinkText : styles.navLinkText}>
+                <Link to="/home/class12-content" component={TouchableOpacity}
+                    style={activeScreen.current == "class12-content" ? styles.activeNavLink : styles.navLink}>
+                    <Text style={activeScreen.current == "class12-content" ? styles.activeNavLinkText : styles.navLinkText}>
                         Class 12
                     </Text>
                 </Link>

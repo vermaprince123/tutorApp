@@ -50,7 +50,7 @@ export default function ShowNotices({ stuClass }) {
   }
 
   const addNotice = () => {
-    navigate("/home/notices/add-edit-notice????" + stuClass)
+    navigate("/home/class"+stuClass+"-content/"+ "notices/add-edit-notice????" + stuClass)
   }
   return (
     <View style={styles.container}>
