@@ -19,6 +19,9 @@ export default function StudentLogin() {
     useEffect(() => {
         (async () => {
                 var loggedUser = await Storage.getItem({key: "loggedUser"});
+                if(!loggedUser){
+                    return null;
+                }
                 if(loggedUser === "teacher"){
                     global.user = {
                         user: "teacher",
@@ -32,6 +35,9 @@ export default function StudentLogin() {
                         stuClass: stuClassValue
                     }
                     navigate('/home/class' + stuClassValue + "-content");
+                }
+                else{
+                    return;
                 }
             
         })();
