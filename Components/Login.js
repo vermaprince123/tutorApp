@@ -5,6 +5,7 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigate } from 'react-router-native';
 
 import { app } from './firebaseConfig';
+import Storage from 'expo-storage';
 
 
 
@@ -15,10 +16,10 @@ export default function Login() {
 
     const onLogin = () => {
         const email = USER_EMAIL;
-        password ? signInWithEmailAndPassword(auth, email, password).then((userCredentials) => {
+        password ? signInWithEmailAndPassword(auth, email, password).then(async () => {
+            await Storage.setItem({key:"loggedUser", value:"teacher"});
             global.user = {
                 user: "teacher",
-                ...userCredentials?.user
             }
             ToastAndroid.show("Signed In as a Teacher", ToastAndroid.SHORT);
             navigate('/home/enrolled-students');

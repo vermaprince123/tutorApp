@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
 import { Text, View, TouchableOpacity, SafeAreaView, StyleSheet, Dimensions, ToastAndroid } from 'react-native';
 import SideDrawer from './SideDrawer';
-import { Routes, Route, Link, useNavigate } from 'react-router-native';
+import { Routes, Route, useNavigate } from 'react-router-native';
 import { getAuth, signOut } from 'firebase/auth';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import StudentRequests from './TeachersSection/StudentRequests';
 import EnrolledStudents from './TeachersSection/EnrolledStudents';
-import PdfItems from './PdfItems';
-import MainContent from './MainContent';
 import Class11Content from './Class11Content';
 import Class12Content from './Class12Content';
+import Storage from 'expo-storage';
 
 
 export default function Home() {
@@ -35,22 +34,30 @@ export default function Home() {
 
   console.log(global.user);
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
 
     if (global.user && global.user.user === "teacher") {
       const auth = getAuth();
-      signOut(auth).then(() => {
+      await signOut(auth).then(async () => {
+        await Storage.setItem({ key: "loggedUser", value: "NULL" });
+        var x = await Storage.getItem({key: "loggedUser"});
+        console.log(x, "fefrewrfef");
+        global.user = null;
         ToastAndroid.show("Signed out of Teacher mode", ToastAndroid.SHORT);
       }).catch((error) => {
         ToastAndroid.show(ERROR_MSG + " Please Retry", ToastAndroid.SHORT);
       });
+      navigate("/login");
     }
     else {
+      await Storage.setItem({ key: "loggedUser", value: "NULL" });
+      global.user = null;
       ToastAndroid.show("Signed out successfully", ToastAndroid.SHORT);
+      navigate("/login");
     }
 
     global.user = null;
-    navigate("/login");
+    
   }
 
   const drawerVisibility = isDrawerOpen ? 'flex' : 'none';

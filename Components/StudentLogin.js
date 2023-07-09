@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ToastAndroid, Dimensions, Image } from 'react-native'
 import { ref, getDatabase, get } from 'firebase/database'
 import { app } from './firebaseConfig'
 import { useNavigate } from 'react-router-native';
 
 import { EMPTY_INPUT_FIELDS, INVALID_PASSWORD, CONTANT_NUMBER_DOES_NOT_EXISTS, INVALID_CLASS, INVALID_CONTACT_NUMBER, ERROR_MSG, CLASS_NOT_FOUND } from './AppConstant';
-
+import { Storage } from 'expo-storage'
+import { async } from '@firebase/util';
 
 export default function StudentLogin() {
     const [contact, setContact] = useState("");
@@ -13,8 +14,28 @@ export default function StudentLogin() {
     const [stuClass, setStuClass] = useState("");
 
     const navigate = useNavigate();
-
     const database = getDatabase(app);
+
+    useEffect(() => {
+        (async () => {
+                var loggedUser = await Storage.getItem({key: "loggedUser"});
+                if(loggedUser === "teacher"){
+                    global.user = {
+                        user: "teacher",
+                    }
+                    navigate('/home/enrolled-students');
+                }
+                else if(loggedUser === "student"){
+                    var stuClassValue = await Storage.getItem({key: "class"});
+                    global.user = {
+                        user: "student",
+                        stuClass: stuClassValue
+                    }
+                    navigate('/home/class' + stuClassValue + "-content");
+                }
+            
+        })();
+    }, [])
 
     const handleLogin = () => {
 
@@ -40,16 +61,18 @@ export default function StudentLogin() {
         const studentRef = ref(database, studentPath);
         console.log(studentRef, "stu");
 
-        get(studentRef).then((data) => {
+        get(studentRef).then(async (data) => {
             if (data && data.val()) {
                 const getAvailableContact = data.val()[contact];
                 if (getAvailableContact) {
                     if (getAvailableContact.password == password) {
                         global.user = {
                             user: "student",
-                            class: stuClass,
-                            ...data.val()
+                            class: stuClass
                         }
+                        await Storage.setItem({key:"loggedUser", value:"student"});
+                        await Storage.setItem({key:"class", value:stuClass});
+
                         navigate('/home/class' + stuClass + "-content");
                     }
                     else {
