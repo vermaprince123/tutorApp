@@ -23,8 +23,6 @@ public class MainActivity extends ReactActivity {
     super.onCreate(savedInstanceState); 
     getWindow().setFlags( WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE );
     setTheme(R.style.AppTheme);
-    
-    super.onCreate(null);
   }
 
   /**
