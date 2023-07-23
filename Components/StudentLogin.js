@@ -30,9 +30,13 @@ export default function StudentLogin() {
                 }
                 else if(loggedUser === "student"){
                     var stuClassValue = await Storage.getItem({key: "class"});
+                    var stuNameValue = await Storage.getItem({key:"name"});
+                    var stuContactValue = await Storage.getItem({key:"contact"});
                     global.user = {
                         user: "student",
-                        stuClass: stuClassValue
+                        class: stuClassValue,
+                        name: stuNameValue,
+                        contact: stuContactValue
                     }
                     navigate('/home/class' + stuClassValue + "-content");
                 }
@@ -74,10 +78,14 @@ export default function StudentLogin() {
                     if (getAvailableContact.password == password) {
                         global.user = {
                             user: "student",
-                            class: stuClass
+                            class: stuClass,
+                            name: getAvailableContact.name,
+                            contact: getAvailableContact.contact
                         }
                         await Storage.setItem({key:"loggedUser", value:"student"});
                         await Storage.setItem({key:"class", value:stuClass});
+                        await Storage.setItem({key: "name", value:getAvailableContact.name});
+                        await Storage.setItem({key: "contact", value:getAvailableContact.contact});
 
                         navigate('/home/class' + stuClass + "-content");
                     }

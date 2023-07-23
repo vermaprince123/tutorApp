@@ -22,19 +22,25 @@ export default function SideDrawer({ closeSideDrawer, handleSignOut }) {
     else if (path == "student-requests") {
         activeScreen.current = "student-requests"
     }
-    else{
+    else if (path == "about-us") {
+        activeScreen.current = "about-us"
+    }
+    else if(path == "student-profile"){
+        activeScreen.current = "student-profile"
+    }
+    else {
         let class11Pattern = /class11-content.*/
         let class12Pattern = /class12-content.*/
 
-        if(class11Pattern.test(path)){
+        if (class11Pattern.test(path)) {
             activeScreen.current = "class11-content"
         }
-        else if(class12Pattern.test(path)){
+        else if (class12Pattern.test(path)) {
             activeScreen.current = "class12-content"
         }
-        
-    }
 
+    }
+    console.log(global.user, "USER")
 
     return (
         <View style={styles.container} elevation={7}>
@@ -48,34 +54,46 @@ export default function SideDrawer({ closeSideDrawer, handleSignOut }) {
 
 
             <View style={styles.navLinkContainer}>
-                <Link to="/home/enrolled-students" component={TouchableOpacity}
+                <Link to="/home/about-us" component={TouchableOpacity}
+                    style={activeScreen.current == "about-us" ? styles.activeNavLink : styles.navLink}>
+                    <Text style={activeScreen.current == "about-us" ? styles.activeNavLinkText : styles.navLinkText}>
+                        About Us
+                    </Text>
+                </Link>
+                {global.user.user === "teacher" && <Link to="/home/enrolled-students" component={TouchableOpacity}
                     style={activeScreen.current == "enrolled-students" ? styles.activeNavLink : styles.navLink}>
                     <Text style={activeScreen.current == "enrolled-students" ? styles.activeNavLinkText : styles.navLinkText}>
                         Enrolled Students
                     </Text>
-                </Link>
-                <Link to="/home/student-requests" component={TouchableOpacity}
+                </Link>}
+                {global.user.user === "teacher" && <Link to="/home/student-requests" component={TouchableOpacity}
                     style={activeScreen.current == "student-requests" ? styles.activeNavLink : styles.navLink}>
                     <Text style={activeScreen.current == "student-requests" ? styles.activeNavLinkText : styles.navLinkText}>
                         Student Requests
                     </Text>
-                </Link>
-                <Link to="/home/class11-content" component={TouchableOpacity}
+                </Link>}
+                {(global.user.user === "teacher" || global.user.class == "11") && <Link to="/home/class11-content" component={TouchableOpacity}
                     style={activeScreen.current == "class11-content" ? styles.activeNavLink : styles.navLink}>
                     <Text style={activeScreen.current == "class11-content" ? styles.activeNavLinkText : styles.navLinkText}>
-                        Class 11
+                        {global.user.user === "teacher" ? "Class 11" : "Home"}
                     </Text>
-                </Link>
-                <Link to="/home/class12-content" component={TouchableOpacity}
+                </Link>}
+                {(global.user.user === "teacher" || global.user.class == "12") && <Link to="/home/class12-content" component={TouchableOpacity}
                     style={activeScreen.current == "class12-content" ? styles.activeNavLink : styles.navLink}>
                     <Text style={activeScreen.current == "class12-content" ? styles.activeNavLinkText : styles.navLinkText}>
-                        Class 12
+                        {global.user.user === "teacher" ? "Class 12" : "Home"}
                     </Text>
-                </Link>
+                </Link>}
+                {global.user.user === "student" && <Link to="/home/student-profile" component={TouchableOpacity}
+                    style={activeScreen.current == "student-profile" ? styles.activeNavLink : styles.navLink}>
+                    <Text style={activeScreen.current == "student-profile" ? styles.activeNavLinkText : styles.navLinkText}>
+                        Profile
+                    </Text>
+                </Link>}
             </View>
 
             <TouchableOpacity onPress={handleSignOut}>
-                <Text>Sign Out</Text>
+                <Text style={styles.signOutText}>Sign Out</Text>
             </TouchableOpacity>
         </View>
     )
@@ -156,5 +174,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#000'
     },
+    signOutText: {
+        textDecorationLine: 'underline'
+    }
 
 });

@@ -22,3 +22,7 @@ export const INVALID_CONTACT_NUMBER = "Invalid Contact Number";
 
 export const CLASS_NOT_FOUND = "Class not found";
 
+export const APP_URL = "https://play.google.com/store/apps/details?id=com.ishantclasses.tutorapp";
+
+export const SHARE_MESSAGE = "Hey, I have joined Ishant Commerce Classes and it's really fun !!! click on the link below to join too...\n\n" + APP_URL;
+

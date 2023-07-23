@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Text, View, TouchableOpacity, SafeAreaView, StyleSheet, Dimensions, ToastAndroid } from 'react-native';
+import { Text, View, TouchableOpacity, SafeAreaView, StyleSheet, Dimensions, ToastAndroid, Share } from 'react-native';
 import SideDrawer from './SideDrawer';
 import { Routes, Route, useNavigate } from 'react-router-native';
 import { getAuth, signOut } from 'firebase/auth';
@@ -10,6 +10,10 @@ import EnrolledStudents from './TeachersSection/EnrolledStudents';
 import Class11Content from './Class11Content';
 import Class12Content from './Class12Content';
 import Storage from 'expo-storage';
+import AboutUs from './AboutUs';
+import StudentProfile from './StudentProfile';
+
+import { APP_URL, SHARE_MESSAGE } from './AppConstant';
 
 
 export default function Home() {
@@ -19,6 +23,7 @@ export default function Home() {
 
 
   const isTeacherLoggedIn = (global.user.user === "teacher");
+
 
 
 
@@ -40,7 +45,7 @@ export default function Home() {
       const auth = getAuth();
       await signOut(auth).then(async () => {
         await Storage.setItem({ key: "loggedUser", value: "NULL" });
-        var x = await Storage.getItem({key: "loggedUser"});
+        var x = await Storage.getItem({ key: "loggedUser" });
         console.log(x, "fefrewrfef");
         global.user = null;
         ToastAndroid.show("Signed out of Teacher mode", ToastAndroid.SHORT);
@@ -51,28 +56,42 @@ export default function Home() {
     }
     else {
       await Storage.setItem({ key: "loggedUser", value: "NULL" });
+      await Storage.setItem({ key: "name", value: "NULL" });
+      await Storage.setItem({ key: "class", value: "NULL" });
+      await Storage.setItem({ key: "contact", value: "NULL" });
       global.user = null;
       ToastAndroid.show("Signed out successfully", ToastAndroid.SHORT);
       navigate("/login");
     }
 
     global.user = null;
-    
+
+  }
+
+  const handleShare = async () => {
+    try{
+      await Share.share({
+        message: SHARE_MESSAGE
+      });
+    }
+    catch{
+      console.log("ERROR SHARING FILE")
+    }
   }
 
   const drawerVisibility = isDrawerOpen ? 'flex' : 'none';
   return (
     <SafeAreaView style={styles.homeContainer}>
       <View style={styles.header}>
-        {isTeacherLoggedIn && <TouchableOpacity onPress={openSideDrawer}>
+        <TouchableOpacity onPress={openSideDrawer}>
           <Text style={styles.openDrawerButton}>
             <Icon name="menu" size={30} color="#fff"></Icon>
           </Text>
-        </TouchableOpacity>}
+        </TouchableOpacity>
         <Text style={styles.title}>  Ishant Commerce Classes</Text>
-        <TouchableOpacity onPress={handleSignOut} style={styles.logOutButtonContainer}>
+        <TouchableOpacity onPress={handleShare} style={styles.logOutButtonContainer}>
           <Text style={styles.logOutButton}>
-            <Icon name="logout" size={30} color="#fff"></Icon>
+            <Icon name="share-variant" size={25} color="#fff"></Icon>
           </Text>
         </TouchableOpacity>
       </View>
@@ -80,9 +99,11 @@ export default function Home() {
       <View style={styles.mainContainer}>
         <Routes>
           <Route path="/student-requests" element={<StudentRequests closeSideDrawer={closeSideDrawer} />} />
+          <Route path="/about-us" element={<AboutUs closeSideDrawer={closeSideDrawer} />} />
           <Route path="/enrolled-students" element={<EnrolledStudents closeSideDrawer={closeSideDrawer} />} />
           <Route path="/class11-content/*" element={<Class11Content closeSideDrawer={closeSideDrawer} />} />
           <Route path="/class12-content/*" element={<Class12Content closeSideDrawer={closeSideDrawer} />} />
+          <Route path="/student-profile" element={<StudentProfile closeSideDrawer={closeSideDrawer} />} />
           {/* <Route path="/*" element={<MainContent closeSideDrawer={closeSideDrawer} />} /> */}
         </Routes>
       </View>
@@ -135,7 +156,8 @@ const styles = StyleSheet.create({
   },
   logOutButtonContainer: {
     position: 'absolute',
-    right: 2
+    right: 5,
+    top: 12
   },
   title: {
     color: "#fff",
